@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const getWeekly = require('../models/getWeekly.js');
 const setWeekly = require('../models/setWeekly.js');
+const insertWeekly = require('../models/insertWeekly.js');
 
 router.post('/createUser', (req, res) => {
     res.json({ response: 'a GET request for LOOKING at questions' });
@@ -16,11 +17,21 @@ router.get('/getStats/Daily', (req, res) => {
 
 router.get('/getStats/Weekly', (req, res) => {
     console.log(req.query)
-    res.json(getWeekly(req.query, res))
-    /*res.json({
-        response: 'a POST request for CREATING questions',
-        body: req.body
-    });*/
+
+    getWeekly(req.query, function(result){
+        console.log(result)
+
+        if(result == 'Empty'){
+
+            insertWeekly(req.query, function(result){
+                console.log(result)
+                res.json('Inserted!')
+            })
+        }
+        else{
+            res.json(result)
+        }
+    })
 });
 
 
@@ -32,11 +43,13 @@ router.get('/getStats/Monthly', (req, res) => {
 });
 
 router.post('/setStats/Weekly', (req, res) => {
-    res.json(setWeekly(req.body))
-    /*res.json({
-        response: 'a POST request for CREATING questions',
-        body: req.body
-    });*/
+    console.log(req.body)
+
+    setWeekly(req.body, function(result){
+        console.log(result)
+
+        res.json(result)
+    })
 });
 
 module.exports = router;

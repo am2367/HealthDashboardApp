@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-//"mongodb://am2367:AM201475@ds119052.mlab.com:19052/mydb"
-mongoose.connect('mongodb://localhost:27017/myapp');
-var db = mongoose.connection;
-    db.on('error', console.error.bind(console, 'connection error:'));
-    db.once('open', function() {
-        console.log('MongoDB connected!')
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/myapp";
+
+MongoClient.connect(url, function(err, db) {
+if (err) throw err;
+console.log("Database created!");
+db.close();
 });
   var myobj = { username: 'amarkenzon', password: 'password', name: "Alex", age: 22, email: "alex.markenzon@yahoo.com" };
   db.collection("Users").insertOne(myobj, function(err, res) {

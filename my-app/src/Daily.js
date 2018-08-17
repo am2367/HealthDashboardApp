@@ -7,6 +7,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import DayCard from './dayCard.js'
+import moment from 'moment';
 
 const styles = theme => ({
     root: {
@@ -31,19 +33,46 @@ const styles = theme => ({
   });
 
 class Daily extends React.Component {
+  state = {data: []}
+    
+  handleErrors = (response) => {
+      if (!response.ok) {
+          throw Error(response.statusText);
+      }
+      return response;
+  }
+  componentWillMount = () => {
+      this.getData()
+  }
+
+  getData = () => {
+      const url = new URL("http://localhost:4200/getStats/Weekly");
+      const params = {dateStart: moment().startOf("isoWeek").format(), 
+                      dateEnd: moment().endOf("isoWeek").format()}
+
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+      fetch(url)
+      .then(this.handleErrors)
+      .then(response => response.json())
+      .then(data=>{
+          if(data == 'Inserted!'){
+              this.getData()
+          }else{
+              this.setState({data: data})
+          }
+      })
+  }
     render() {
         const { classes } = this.props;
-        let d = new Date();
-        let day = d.getDay() || 7 - 1;
+        let day = moment().isoWeekday() - 1;
         
         /*fetch('http://localhost:4200/')
         .then(response => response.json())
         .then(posts => (console.log(posts)))*/
          return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
-        <Card className={classes.Card}>
-            <CardHeader title={this.props.weekdays[day-1]}/>
-        </Card>
-        </div>)
+                  <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/>
+                </div>)
     }
 }
   

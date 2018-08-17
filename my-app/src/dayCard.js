@@ -43,14 +43,8 @@ const styles = theme => ({
   });
 
 class dayCard extends React.Component {
-    state = {
-            editable: false,
-            day: moment(this.props.date).format('MM/DD/YYYY'),
-            Run: {Time: 1, Distance: 0, Cals: 0},
-            Swim: {Time: 0, Distance: 2, Cals: 0},
-            Bike: {Time: 0, Distance: 3, Cals: 0},
-            Workout: {Time: 4, Distance: 0, Cals: 0}
-            }
+    state = {data: this.props.data,
+             editable: false}
 
     edit = () => {
         if(this.state.editable){
@@ -66,8 +60,17 @@ class dayCard extends React.Component {
         return(this.state.this.val)
     }
 
-    handleChange = (event) => {
-        this.setState({value: event.target.value});
+    handleChange = (id, item, event) => {
+        let temp = this.state.data;
+        temp[this.props.index][id][item] = event.target.value
+        
+        //change editable state twice to update stateless input
+        this.setState({editable: false})
+        this.setState({editable: true})
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({data: nextProps.data})
     }
 
     handleErrors = (response) => {
@@ -83,16 +86,18 @@ class dayCard extends React.Component {
             headers: {
                 'Content-type': 'application/json'},
             body: JSON.stringify({
-                    Date: new Date(this.state.day),
-                    Run: this.state.Run,
-                    Swim: this.state.Swim,
-                    Bike: this.state.Bike,
-                    Workout: this.state.Workout })
+                    Date: new Date(this.state.data[this.props.index]['Date']),
+                    Run: this.state.data[this.props.index]['Run'],
+                    Swim: this.state.data[this.props.index]['Swim'],
+                    Bike: this.state.data[this.props.index]['Bike'],
+                    Workout: this.state.data[this.props.index]['Workout']})
         })
         .then(this.handleErrors)
         .then(function(response) {
             console.log(response.json())
         })
+
+        this.edit()
     }
 
     render() {
@@ -106,70 +111,92 @@ class dayCard extends React.Component {
                 type="number"
                 fullWidth={true}
                 label=''
-                value={this.state[id][item]}
-                onChange={this.handleChange}
+                value={this.state.data[this.props.index][id][item]}
+                onChange={(e) => this.handleChange(id, item, e)}
                 style={{width: '50px', display: this.state.editable ? '' : 'none'}}
                 />
             </TableCell>
         )
 
-        return (<Card style={{backgroundColor: (moment().format('dddd') == this.props.weekdays[this.props.index]) ? '#14e4ff' : ''}} className={classes.Card}>
-        <CardHeader title={this.props.weekdays[this.props.index] + ' ' + this.state.day}/>
-        <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
-        <Button style={{backgroundColor: 'green', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
-        <CardContent>
-            <Table>
-                <TableHead>
-                <TableRow>
-                    <TableCell numeric style={{paddingRight: 0, textAlign: 'left'}}>Activity</TableCell>
-                    <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Time</TableCell>
-                    <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Distance</TableCell>
-                    <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>kCals</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody key="Run">
+        const dataCell = (id, item) => (
+            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : ''}}>
+                {this.state.data[this.props.index][id][item]}
+            </TableCell>
+        )
+        if (this.state['data'].length > 0){
+            return (<Card style={{backgroundColor: (moment().format('dddd') == this.props.weekdays[this.props.index]) ? '#14e4ff' : ''}} className={classes.Card}>
+            <CardHeader title={this.props.weekdays[this.props.index] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>
+            <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
+            <Button style={{backgroundColor: 'green', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
+            <CardContent>
+                <Table>
+                    <TableHead>
                     <TableRow>
-                        <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                            Run
-                        </TableCell>
-                        {field('Run', 'Time')}
-                        {field('Run', 'Distance')}
-                        {field('Run', 'Cals')}
+                        <TableCell numeric style={{paddingRight: 0, textAlign: 'left'}}>Activity</TableCell>
+                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Time</TableCell>
+                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Distance</TableCell>
+                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>kCals</TableCell>
                     </TableRow>
-                </TableBody>
-                <TableBody key="Swim">
-                    <TableRow>
-                        <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                            Swim
-                        </TableCell>
-                        {field('Swim', 'Time')}
-                        {field('Swim', 'Distance')}
-                        {field('Swim', 'Cals')}
-                    </TableRow>
-                </TableBody>
-                <TableBody key="Bike">
-                    <TableRow>
-                        <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                            Bike
-                        </TableCell>
-                        {field('Bike', 'Time')}
-                        {field('Bike', 'Distance')}
-                        {field('Bike', 'Cals')}
-                    </TableRow>
-                </TableBody>
-                <TableBody key="Workout">
-                    <TableRow>
-                        <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                            Workout
-                        </TableCell>
-                        {field('Workout', 'Time')}
-                        {field('Workout', 'Distance')}
-                        {field('Workout', 'Cals')}
-                    </TableRow>
-                </TableBody>
-            </Table>   
-        </CardContent>
-        </Card>)
+                    </TableHead>
+                    <TableBody key="Run">
+                        <TableRow>
+                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
+                                Run
+                            </TableCell>
+                            {dataCell('Run', 'Time')}
+                            {dataCell('Run', 'Distance')}
+                            {dataCell('Run', 'Cals')}
+                            {field('Run', 'Time')}
+                            {field('Run', 'Distance')}
+                            {field('Run', 'Cals')}
+                        </TableRow>
+                    </TableBody>
+                    <TableBody key="Swim">
+                        <TableRow>
+                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
+                                Swim
+                            </TableCell>
+                            {dataCell('Swim', 'Time')}
+                            {dataCell('Swim', 'Distance')}
+                            {dataCell('Swim', 'Cals')}
+                            {field('Swim', 'Time')}
+                            {field('Swim', 'Distance')}
+                            {field('Swim', 'Cals')}
+                        </TableRow>
+                    </TableBody>
+                    <TableBody key="Bike">
+                        <TableRow>
+                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
+                                Bike
+                            </TableCell>
+                            {dataCell('Bike', 'Time')}
+                            {dataCell('Bike', 'Distance')}
+                            {dataCell('Bike', 'Cals')}
+                            {field('Bike', 'Time')}
+                            {field('Bike', 'Distance')}
+                            {field('Bike', 'Cals')}
+                        </TableRow>
+                    </TableBody>
+                    <TableBody key="Workout">
+                        <TableRow>
+                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
+                                Workout
+                            </TableCell>
+                            {dataCell('Workout', 'Time')}
+                            {dataCell('Workout', 'Distance')}
+                            {dataCell('Workout', 'Cals')}
+                            {field('Workout', 'Time')}
+                            {field('Workout', 'Distance')}
+                            {field('Workout', 'Cals')}
+                        </TableRow>
+                    </TableBody>
+                </Table>   
+            </CardContent>
+            </Card>)
+        }
+        else{
+            return null
+        }
     }
 }
   

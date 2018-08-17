@@ -33,7 +33,7 @@ const styles = theme => ({
   });
 
 class Weekly extends React.Component {
-    state = {}
+    state = {data: []}
     
     handleErrors = (response) => {
         if (!response.ok) {
@@ -42,6 +42,10 @@ class Weekly extends React.Component {
         return response;
     }
     componentWillMount = () => {
+        this.getData()
+    }
+
+    getData = () => {
         const url = new URL("http://localhost:4200/getStats/Weekly");
         const params = {dateStart: moment().startOf("isoWeek").format(), 
                         dateEnd: moment().endOf("isoWeek").format()}
@@ -51,7 +55,13 @@ class Weekly extends React.Component {
         fetch(url)
         .then(this.handleErrors)
         .then(response => response.json())
-        .then(data=>{console.log(data)})
+        .then(data=>{
+            if(data == 'Inserted!'){
+                this.getData()
+            }else{
+                this.setState({data: data})
+            }
+        })
     }
 
     render() {
@@ -63,16 +73,22 @@ class Weekly extends React.Component {
         for(var i=0; i < 3; i++){
             let day = moment().startOf("'isoWeek'").add(i, 'day').toDate();
             daysTop.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-                            <DayCard weekdays={this.props.weekdays} index={i} date={day}/>
+                            <DayCard weekdays={this.props.weekdays} index={i} date={day} data={this.state.data}/>
                         </Grid>);
         }
         for(var x=3; x < 7; x++){
             let day = moment().startOf("'isoWeek'").add(x, 'day').toDate();
             daysBottom.push(<Grid item sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
-                                <DayCard weekdays={this.props.weekdays} index={x} date={day}/>
+                                <DayCard weekdays={this.props.weekdays} index={x} date={day} data={this.state.data}/>
                             </Grid>);
         }
-        return (<div className={classes.root}><Grid container spacing={24}>{daysTop}</Grid><Grid container spacing={24}>{daysBottom}</Grid></div>)
+
+        if (this.state['data'].length > 0){
+            return (<div className={classes.root}><Grid container spacing={24}>{daysTop}</Grid><Grid container spacing={24}>{daysBottom}</Grid></div>)
+        }
+        else{
+            return null
+        }
     }
 }
   
