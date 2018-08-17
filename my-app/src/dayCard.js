@@ -44,7 +44,8 @@ const styles = theme => ({
 
 class dayCard extends React.Component {
     state = {data: this.props.data,
-             editable: false}
+             editable: false,
+            temp: []}
 
     edit = () => {
         if(this.state.editable){
