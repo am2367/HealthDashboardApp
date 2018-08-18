@@ -46,10 +46,10 @@ class Daily extends React.Component {
   }
 
   getData = () => {
-    if (process.env.appURL){ 
-        var url = new URL(process.env.appURL + "/getStats/Weekly");
-    }else{
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
         var url = new URL("http://localhost:4200/getStats/Weekly");
+    }else{
+        var url = new URL("https://healthdashboardapp.herokuapp.com/getStats/Weekly");
     }
       const params = {dateStart: moment().startOf("isoWeek").format(), 
                       dateEnd: moment().endOf("isoWeek").format()}
