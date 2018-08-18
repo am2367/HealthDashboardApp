@@ -82,7 +82,12 @@ class dayCard extends React.Component {
     }
 
     save = () => {
-        fetch('http://localhost:4200/setStats/Weekly', {
+        if (!process.env.URL){ 
+            var url = new URL("http://localhost:4200/setStats/Weekly");
+        }else{
+            var url = new URL(process.env.URL + "/setStats/Weekly");
+        }
+        fetch(url, {
             method: 'post',
             headers: {
                 'Content-type': 'application/json'},
