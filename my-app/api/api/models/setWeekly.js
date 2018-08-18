@@ -1,6 +1,13 @@
 const setWeekly = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/myapp";
+    if (!process.env.mLabUser){
+        var url = "mongodb://localhost:27017/myapp";
+    }
+    else{
+        let username = process.env.mLabUser;
+        let password = process.env.mLabPassword;
+        var url = "mongodb://" + username + ':' + password + "@ds119052.mlab.com:19052/mydb";
+    }
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -15,7 +22,7 @@ const setWeekly = (req, callback) => {
         dbo.collection("Entries").updateOne(myquery, newvalues, function(err, result) {
             if (err) throw err;
 
-            callback(result)
+            callback('Saved!')
         });
 
         db.close();

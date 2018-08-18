@@ -93,12 +93,13 @@ class dayCard extends React.Component {
                     Bike: this.state.data[this.props.index]['Bike'],
                     Workout: this.state.data[this.props.index]['Workout']})
         })
-        .then(this.handleErrors)
-        .then(function(response) {
-            console.log(response.json())
+        .then(response => response.json())
+        .then(data=>{
+            if(data == 'Saved!'){
+                this.edit()
+                alert('Saved!')
+            }
         })
-
-        this.edit()
     }
 
     render() {
