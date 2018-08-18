@@ -46,8 +46,8 @@ class Weekly extends React.Component {
     }
 
     getData = () => {
-        if (process.env.URL){ 
-            var url = new URL(process.env.URL + "/getStats/Weekly");
+        if (process.env.appURL){ 
+            var url = new URL(process.env.appURL + "/getStats/Weekly");
         }else{
             var url = new URL("http://localhost:4200/getStats/Weekly");
         }
