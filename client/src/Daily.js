@@ -46,17 +46,17 @@ class Daily extends React.Component {
   }
 
   getData = () => {
-    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-        var url = new URL("http://localhost:4200/getStats/Weekly");
+    /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
+        var url = new URL("http://localhost:4200/api/getStats/Weekly");
     }else{
-        var url = new URL("https://healthdashboardapp.herokuapp.com/getStats/Weekly");
-    }
-      const params = {dateStart: moment().startOf("isoWeek").format(), 
-                      dateEnd: moment().endOf("isoWeek").format()}
+        var url = new URL("https://healthdashboardapp.herokuapp.com/api/getStats/Weekly");
+    }*/
+     
+    let dateStart = moment().startOf("isoWeek").format() 
+    let dateEnd = moment().endOf("isoWeek").format()
+      //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
-      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
-      fetch(url)
+      fetch('/api/getStats/Weekly?dateStart=' + dateStart + '&dateEnd=' + dateEnd)
       .then(this.handleErrors)
       .then(response => response.json())
       .then(data=>{
@@ -71,9 +71,6 @@ class Daily extends React.Component {
         const { classes } = this.props;
         let day = moment().isoWeekday() - 1;
         
-        /*fetch('http://localhost:4200/')
-        .then(response => response.json())
-        .then(posts => (console.log(posts)))*/
          return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
                   <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/>
                 </div>)

@@ -5,22 +5,18 @@ const setWeekly = require('../models/setWeekly.js');
 const insertWeekly = require('../models/insertWeekly.js');
 const path = require('path');
 
-router.use(express.static(path.join(__dirname, '../../../build')));
-
-
-
-router.post('/createUser', (req, res) => {
+router.post('/api/createUser', (req, res) => {
     res.json({ response: 'a GET request for LOOKING at questions' });
 });
 
-router.get('/getStats/Daily', (req, res) => {
+router.get('/api/getStats/Daily', (req, res) => {
     res.json({
         response: 'a POST request for CREATING questions',
         body: req.body
     });
 });
 
-router.get('/getStats/Weekly', (req, res) => {
+router.get('/api/getStats/Weekly', (req, res) => {
     console.log(req.query)
 
     getWeekly(req.query, function(result){
@@ -40,14 +36,14 @@ router.get('/getStats/Weekly', (req, res) => {
 });
 
 
-router.get('/getStats/Monthly', (req, res) => {
+router.get('/api/getStats/Monthly', (req, res) => {
     res.json({
         response: 'a POST request for CREATING questions',
         body: req.body
     });
 });
 
-router.post('/setStats/Weekly', (req, res) => {
+router.post('/api/setStats/Weekly', (req, res) => {
     console.log(req.body)
 
     setWeekly(req.body, function(result){
@@ -57,8 +53,13 @@ router.post('/setStats/Weekly', (req, res) => {
     })
 });
 
-router.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../../../', 'build', 'index.html'));
-});
+if (process.env.NODE_ENV === 'production') {
+    // Serve any static files
+    router.use(express.static(path.join(__dirname, 'client/build')));
+    // Handle React routing, return all requests to React app
+    router.get('*', function(req, res) {
+      res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    });
+  }
 
 module.exports = router;

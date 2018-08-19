@@ -82,12 +82,12 @@ class dayCard extends React.Component {
     }
 
     save = () => {
-        if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-            var url = new URL("http://localhost:4200/setStats/Weekly");
+        /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
+            var url = new URL("http://localhost:4200/api/setStats/Weekly");
         }else{
-            var url = new URL("https://healthdashboardapp.herokuapp.com/setStats/Weekly");
-        }
-        fetch(url, {
+            var url = new URL("https://healthdashboardapp.herokuapp.com/api/setStats/Weekly");
+        }*/
+        fetch('/api/setStats/Weekly', {
             method: 'post',
             headers: {
                 'Content-type': 'application/json'},
