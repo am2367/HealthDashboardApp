@@ -42,7 +42,7 @@ const styles = theme => ({
     }
   });
 
-class dayCard extends React.Component {
+class DayCard extends React.Component {
     state = {data: this.props.data,
              editable: false,
             temp: []}
@@ -109,7 +109,7 @@ class dayCard extends React.Component {
 
     render() {
         const { classes } = this.props;
-
+        console.log(this.state.data)
         const field = (id, item) => (
             <TableCell numeric style={{paddingRight: 0}}>
                 <TextField
@@ -130,7 +130,7 @@ class dayCard extends React.Component {
                 {this.state.data[this.props.index][id][item]}
             </TableCell>
         )
-        if (this.state['data'].length > 0){
+        if (Object.keys(this.state.data).length != 0){
             return (<Card style={{backgroundColor: (moment().format('dddd') == this.props.weekdays[this.props.index]) ? '#14e4ff' : ''}} className={classes.Card}>
             <CardHeader title={this.props.weekdays[this.props.index] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>
             <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
@@ -207,6 +207,6 @@ class dayCard extends React.Component {
     }
 }
   
-const dayCardWrapped = withStyles(styles)(dayCard);
+const DayCardWrapped = withStyles(styles)(DayCard);
 
-export default dayCardWrapped;
+export default DayCardWrapped;

@@ -3,6 +3,8 @@ const router = express.Router();
 const getWeekly = require('../models/getWeekly.js');
 const setWeekly = require('../models/setWeekly.js');
 const insertWeekly = require('../models/insertWeekly.js');
+const insertDaily = require('../models/insertDaily.js');
+const getDaily = require('../models/getDaily.js');
 const path = require('path');
 
 router.post('/api/createUser', (req, res) => {
@@ -10,10 +12,22 @@ router.post('/api/createUser', (req, res) => {
 });
 
 router.get('/api/getStats/Daily', (req, res) => {
-    res.json({
-        response: 'a POST request for CREATING questions',
-        body: req.body
-    });
+    console.log(req.query)
+
+    getDaily(req.query, function(result){
+        console.log(result)
+
+        if(result == 'Empty'){
+
+            insertDaily(req.query, function(result){
+                console.log(result)
+                res.json('Inserted!')
+            })
+        }
+        else{
+            res.json(result)
+        }
+    })
 });
 
 router.get('/api/getStats/Weekly', (req, res) => {
@@ -22,7 +36,7 @@ router.get('/api/getStats/Weekly', (req, res) => {
     getWeekly(req.query, function(result){
         console.log(result)
 
-        if(result == 'Empty'){
+        if(result == 'Missing Days'){
 
             insertWeekly(req.query, function(result){
                 console.log(result)

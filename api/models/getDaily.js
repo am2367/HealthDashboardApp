@@ -1,4 +1,4 @@
-const getWeekly = (req, callback) => {
+const getDaily = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (!process.env.mLabUser){
         var url = "mongodb://localhost:27017/myapp";
@@ -9,14 +9,7 @@ const getWeekly = (req, callback) => {
         var url = "mongodb://" + username + ':' + password + "@ds119052.mlab.com:19052/mydb";
     }
     MongoClient.connect(url, function(err, db) {
-        var query = {Date: { $gte: new Date(req.dateStart), $lte: new Date(req.dateEnd) } }
-        /*var query = {$and: 
-                        [{Date: 
-                            { $gte: new Date(req.dateStart), 
-                              $lte: new Date(req.dateEnd) } 
-                            }, 
-                            {Username: 'amarkenzon'}
-                        ]};*/
+        var query = {Date: new Date(req.date) }
 
         if (err) throw err;
         console.log("Database Connected!");
@@ -26,17 +19,17 @@ const getWeekly = (req, callback) => {
         dbo.collection("Entries").find(query).toArray(function myFunc(err, result) {
             if (err) throw err;
             
-            if(result.length == 7){
+            if(result.length > 0){
                 console.log(result)
                 callback(result);
             }
             else{
-                callback('Missing Days')
-            }    
-        
+                callback('Empty')
+            }
+            
             db.close();
         });
     });
 }
 
-module.exports = getWeekly;
+module.exports = getDaily;

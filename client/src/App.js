@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
   }
 
   showMonthly = () => {
-    return(<Monthly/>)
+    return(<Monthly weekdays={this.weekdays}/>)
   };
 
   render(){

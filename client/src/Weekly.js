@@ -7,7 +7,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import DayCard from './dayCard.js'
+import DayCard from './DayCard.js'
 import moment from 'moment';
 
 const styles = theme => ({

@@ -7,6 +7,9 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import DayModal from './DayModal.js';
+import moment from 'moment';
+import MonthlyCard from './MonthlyCard.js';
 
 const styles = theme => ({
     root: {
@@ -31,6 +34,41 @@ const styles = theme => ({
   });
 
 class Monthly extends React.Component {
+
+    state={open: false, 
+           openDay: 0,
+           data: ''}
+    open = (i) => {
+      this.setState({open: true, openDay: i, data: []}, () => this.getData(i))
+    }
+
+    close = () => {
+      this.setState({open: false})
+    }
+
+    getData = (i) => {
+      /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
+          var url = new URL("http://localhost:4200/api/getStats/Weekly");
+      }else{
+          var url = new URL("https://healthdashboardapp.herokuapp.com/api/getStats/Weekly");
+      }*/
+      let date = moment().startOf("month").add(i, 'day').toDate().toISOString();
+        //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+        fetch('/api/getStats/Daily?date=' + date)
+        .then(this.handleErrors)
+        .then(response => response.json())
+        .then(data=>{
+            if(data == 'Inserted!'){
+                this.getData(i)
+            }else{
+                let data1 = data[0]
+                let temp = {[i]: data1}
+                this.setState({data: temp})
+            }
+        })
+    }
+
     render() {
         const { classes } = this.props;
         let d = new Date();
@@ -40,10 +78,13 @@ class Monthly extends React.Component {
         let day = d.getDay() || 7 - 1;
         let dayCount = new Date(month, year, 0).getDate();
         let days = []
+
         for(var i=0; i < dayCount; i++){
-        days.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{backgroundColor: (dayNumber == i+1) ? '#14e4ff' : ''}} className={classes.Card}><CardHeader title={i+1}/></Card></Grid>);
+          
+          days.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><MonthlyCard setClose={()=>{this.close()}} setOpen={(i)=>{this.open(i)}} index={i} data={this.state.data}/></Grid>);
         }
-        return (<div className={classes.root}><Grid container spacing={24}>{days}</Grid></div>)
+
+        return (<div className={classes.root}><Grid container spacing={24}><DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.state.data}/>{days}</Grid></div>)
     }
 }
   

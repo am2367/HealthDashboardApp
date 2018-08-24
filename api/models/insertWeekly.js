@@ -20,20 +20,28 @@ const insertWeekly = (req, callback) => {
             let date = new Date(req.dateStart)
             date.setDate(date.getDate() + x);
 
-            let data = { Date: date,
+            /*let data = { Date: date,
                 Run: { Time: 0, Distance: 0, Cals: 0 },
                 Swim: { Time: 0, Distance: 0, Cals: 0 },
                 Bike: { Time: 0, Distance: 0, Cals: 0 },
-                Workout: { Time: 0, Distance: 0, Cals: 0 } }
+                Workout: { Time: 0, Distance: 0, Cals: 0 } }*/
             
-            insertList.push(data)
-        }
-        dbo.collection("Entries").insertMany(insertList, function(err, result) {
-            if (err) throw err;
+            //insertList.push(data)
 
-            callback(result)
+            dbo.collection("Entries").update({Date: date},{ Date: date,
+                Run: { Time: 0, Distance: 0, Cals: 0 },
+                Swim: { Time: 0, Distance: 0, Cals: 0 },
+                Bike: { Time: 0, Distance: 0, Cals: 0 },
+                Workout: { Time: 0, Distance: 0, Cals: 0 }},{upsert: true}, function(err, result) {
+                if (err) throw err;
+    
+                //callback(result)
+            
+            });
+
+            callback('Inserted!')
+        }
         
-        });
 
         db.close();
     })
