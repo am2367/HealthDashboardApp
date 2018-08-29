@@ -72,7 +72,8 @@ class Daily extends React.Component {
         let day = moment().isoWeekday() - 1;
         
          return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
-                  <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/>
+                {this.state.data.length > 0 ? <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/> : <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>}
+                  
                 </div>)
     }
 }

@@ -78,11 +78,18 @@ class Monthly extends React.Component {
         let day = d.getDay() || 7 - 1;
         let dayCount = new Date(month, year, 0).getDate();
         let days = []
+        let daysEmpty = []
 
         for(var i=0; i < dayCount; i++){
           
           days.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><MonthlyCard setClose={()=>{this.close()}} setOpen={(i)=>{this.open(i)}} index={i} data={this.state.data}/></Grid>);
         }
+
+        /*for(var i=0; i < dayCount; i++){
+          
+          daysEmpty.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/></Grid>);
+        }*/
+        
 
         return (<div className={classes.root}><Grid container spacing={24}><DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.state.data}/>{days}</Grid></div>)
     }

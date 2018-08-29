@@ -13,8 +13,12 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Icon from '@material-ui/core/Icon';
 import moment from 'moment';
-
+import RunIcon from '@material-ui/icons/DirectionsRun';
+import SwimIcon from '@material-ui/icons/Pool';
+import BikeIcon from '@material-ui/icons/DirectionsBike';
+import WorkoutIcon from '@material-ui/icons/FitnessCenter';
 
 const styles = theme => ({
     root: {
@@ -111,7 +115,7 @@ class DayCard extends React.Component {
         const { classes } = this.props;
         console.log(this.state.data)
         const field = (id, item) => (
-            <TableCell numeric style={{paddingRight: 0}}>
+            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center'}}>
                 <TextField
                 id={id}
                 label="Number"
@@ -120,19 +124,19 @@ class DayCard extends React.Component {
                 label=''
                 value={this.state.data[this.props.index][id][item]}
                 onChange={(e) => this.handleChange(id, item, e)}
-                style={{width: '50px', display: this.state.editable ? '' : 'none'}}
+                style={{width: '50px'}}
                 />
             </TableCell>
         )
 
         const dataCell = (id, item) => (
-            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : ''}}>
+            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center'}}>
                 {this.state.data[this.props.index][id][item]}
             </TableCell>
         )
         if (Object.keys(this.state.data).length != 0){
             return (<Card style={{backgroundColor: (moment().format('dddd') == this.props.weekdays[this.props.index]) ? '#14e4ff' : ''}} className={classes.Card}>
-            <CardHeader title={this.props.weekdays[this.props.index] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>
+            <CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>
             <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
             <Button style={{backgroundColor: 'green', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
             <CardContent>
@@ -148,7 +152,7 @@ class DayCard extends React.Component {
                     <TableBody key="Run">
                         <TableRow>
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                Run
+                                <Icon><RunIcon/></Icon>
                             </TableCell>
                             {dataCell('Run', 'Time')}
                             {dataCell('Run', 'Distance')}
@@ -161,7 +165,7 @@ class DayCard extends React.Component {
                     <TableBody key="Swim">
                         <TableRow>
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                Swim
+                                <Icon><SwimIcon/></Icon>
                             </TableCell>
                             {dataCell('Swim', 'Time')}
                             {dataCell('Swim', 'Distance')}
@@ -174,7 +178,7 @@ class DayCard extends React.Component {
                     <TableBody key="Bike">
                         <TableRow>
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                Bike
+                                <Icon><BikeIcon/></Icon>
                             </TableCell>
                             {dataCell('Bike', 'Time')}
                             {dataCell('Bike', 'Distance')}
@@ -187,7 +191,7 @@ class DayCard extends React.Component {
                     <TableBody key="Workout">
                         <TableRow>
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                Workout
+                                <Icon><WorkoutIcon/></Icon>
                             </TableCell>
                             {dataCell('Workout', 'Time')}
                             {dataCell('Workout', 'Distance')}

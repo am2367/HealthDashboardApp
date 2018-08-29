@@ -4,6 +4,7 @@
   "proxy": "http://localhost:4200",
   "dependencies": {
     "@material-ui/core": "^1.4.3",
+    "@material-ui/icons": "^2.0.3",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",
     "react": "^16.4.1",

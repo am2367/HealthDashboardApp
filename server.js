@@ -5,6 +5,7 @@ var cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4200;
 app.use(express.static(`${__dirname}/client/build`));
+
 //add routes to express app
 var routes = require('./api/routes/routes.js'); //importing route
 app.use(bodyParser());

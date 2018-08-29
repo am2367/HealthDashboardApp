@@ -43,9 +43,11 @@ class Weekly extends React.Component {
     }
     componentWillMount = () => {
         this.getData()
+        console.log(this.props)
     }
 
     getData = () => {
+        console.log('request')
         /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
             var url = new URL("http://localhost:4200/api/getStats/Weekly");
         }else{
@@ -71,6 +73,7 @@ class Weekly extends React.Component {
         const { classes } = this.props;
         let daysTop = [];
         let daysBottom = [];
+        let daysEmpty = [];
         var startOfWeek = moment().startOf("'isoWeek'").toDate();
 
         for(var i=0; i < 3; i++){
@@ -85,12 +88,22 @@ class Weekly extends React.Component {
                                 <DayCard weekdays={this.props.weekdays} index={x} date={day} data={this.state.data}/>
                             </Grid>);
         }
+        for(var i=0; i < 3; i++){
+            daysEmpty.push(<Grid item sm={4} md={4} lg={4}>
+                             <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
+                           </Grid>)
+        }
+        for(var i=3; i < 7; i++){
+            daysEmpty.push(<Grid item sm={3} md={3} lg={3}>
+                             <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
+                           </Grid>)
+        }
 
         if (this.state['data'].length > 0){
             return (<div className={classes.root}><Grid container spacing={24}>{daysTop}</Grid><Grid container spacing={24}>{daysBottom}</Grid></div>)
         }
         else{
-            return null
+            return(<div className={classes.root}><Grid container spacing={24}>{daysEmpty}</Grid></div>)
         }
     }
 }

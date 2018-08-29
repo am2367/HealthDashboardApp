@@ -19,7 +19,6 @@ const insertWeekly = (req, callback) => {
         for(x=0; x<7; x++){
             let date = new Date(req.dateStart)
             date.setDate(date.getDate() + x);
-
             /*let data = { Date: date,
                 Run: { Time: 0, Distance: 0, Cals: 0 },
                 Swim: { Time: 0, Distance: 0, Cals: 0 },
@@ -39,9 +38,9 @@ const insertWeekly = (req, callback) => {
             
             });
 
-            callback('Inserted!')
+            
         }
-        
+        callback('Inserted!')
 
         db.close();
     })
