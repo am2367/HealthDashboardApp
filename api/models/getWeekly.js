@@ -1,5 +1,6 @@
 const getWeekly = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
+    console.log(process.env.mLabUser)
     if (process.env.mLabUser){
         let username = process.env.mLabUser;
         let password = process.env.mLabPassword;
