@@ -1,11 +1,11 @@
 {
-  "name": "my-app-backend",
+  "name": "HealthDashboardApp",
   "version": "1.0.0",
   "scripts": {
+    "start": "npm run server",
     "client": "cd client && npm run start",
     "server": "nodemon server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
