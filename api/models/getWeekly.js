@@ -1,15 +1,15 @@
 const getWeekly = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
-    let username = ''
-    let password = ''
-    let url = ''
+    let username = '';
+    let password = '';
+    let url = '';
     if (process.env.mLabUser){
         username = process.env.mLabUser;
         password = process.env.mLabPassword;
-        var url = "mongodb://" + username + ':' + password + "@ds119052.mlab.com:19052/mydb";
+        url = "mongodb://" + username + ':' + password + "@ds119052.mlab.com:19052/mydb";
     }
     else{
-        var url = "mongodb://localhost:27017/myapp";
+        url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
         var query = {Date: { $gte: new Date(req.dateStart), $lte: new Date(req.dateEnd) } }
