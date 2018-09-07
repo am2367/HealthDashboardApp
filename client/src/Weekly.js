@@ -46,6 +46,10 @@ class Weekly extends React.Component {
         console.log(this.props)
     }
 
+    getDate = (day) => {
+        return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
+      }
+
     getData = () => {
         console.log('request')
         /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
@@ -79,12 +83,14 @@ class Weekly extends React.Component {
         for(var i=0; i < 3; i++){
             let day = moment().startOf("'isoWeek'").add(i, 'day').toDate();
             daysTop.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+                            <h1>{this.state['data'].length > 0 ? this.getDate(i) : ''}</h1>
                             <DayCard weekdays={this.props.weekdays} index={i} date={day} data={this.state.data}/>
                         </Grid>);
         }
         for(var x=3; x < 7; x++){
             let day = moment().startOf("'isoWeek'").add(x, 'day').toDate();
             daysBottom.push(<Grid item sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
+                                <h1>{this.state['data'].length > 0 ? this.getDate(x) : ''}</h1>
                                 <DayCard weekdays={this.props.weekdays} index={x} date={day} data={this.state.data}/>
                             </Grid>);
         }

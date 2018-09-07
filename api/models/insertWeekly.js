@@ -12,7 +12,7 @@ const insertWeekly = (req, callback) => {
     MongoClient.connect(url, function(err, db) {
         console.log("Database Connected!");
         
-        var dbo = db.db("myapp");
+        var dbo = db.db("mydb");
 
         var insertList = []
 

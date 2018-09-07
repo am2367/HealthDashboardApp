@@ -25,7 +25,7 @@ const getWeekly = (req, callback) => {
         if (err) throw err;
         console.log("Database Connected!");
         
-        var dbo = db.db("myapp");
+        var dbo = db.db("mydb");
 
         dbo.collection("Entries").find(query).toArray(function myFunc(err, result) {
             if (err) throw err;

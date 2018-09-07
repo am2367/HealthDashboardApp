@@ -45,6 +45,10 @@ class Daily extends React.Component {
       this.getData()
   }
 
+  getDate = (day) => {
+    return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
+  }
+
   getData = () => {
     /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
         var url = new URL("http://localhost:4200/api/getStats/Weekly");
@@ -72,8 +76,14 @@ class Daily extends React.Component {
         let day = moment().isoWeekday() - 1;
         
          return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
-                {this.state.data.length > 0 ? <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/> : <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>}
-                  
+                    {this.state.data.length > 0 
+                        ?
+                        <div>
+                            <h1>{this.state['data'].length > 0 ? this.getDate(day) : ''}</h1>
+                            <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/>
+                        </div>
+                        : 
+                        <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>}
                 </div>)
     }
 }

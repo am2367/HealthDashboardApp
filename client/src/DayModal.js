@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import DayCard from './DayCard.js'
+import moment from 'moment';
 
 const styles = theme => ({
   paper: {
@@ -24,6 +25,10 @@ class DayModal extends React.Component {
     this.setState({data: nextProps.data})
   }
 
+  getDate = (day) => {
+    return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
+  }
+
   render() {
     const { classes } = this.props;
     return (
@@ -35,7 +40,10 @@ class DayModal extends React.Component {
           open={this.props.open}
           onClose={this.handleClose}
         >
+          <div style={{textAlign: 'center', backgroundColor: 'white'}}>
+            <h1>{Object.keys(this.state.data).length != 0 ? this.getDate(this.props.day) : ''}</h1>
             <DayCard weekdays={this.props.weekdays} index={this.props.day} data={this.state.data}/>
+          </div>
         </Modal>
       </div>
     );

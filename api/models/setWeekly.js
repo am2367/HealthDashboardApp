@@ -13,7 +13,7 @@ const setWeekly = (req, callback) => {
         if (err) throw err;
         console.log("Database created!");
 
-        var dbo = db.db("myapp");
+        var dbo = db.db("mydb");
 
         var myquery = {Date: new Date(req.Date)};
         console.log(req.Date)
