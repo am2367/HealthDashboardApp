@@ -1,4 +1,4 @@
-const insertDaily = (req, username, callback) => {
+const register = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
@@ -19,24 +19,22 @@ const insertDaily = (req, username, callback) => {
             var dbo = db.db("myapp")
         }
 
-        let date = new Date(req.date)
+        let user = {username: req.username, 
+                    password: req.password, 
+                    lastName: req.lastName, 
+                    firstName: req.firstName, 
+                    email: req.email}
 
-        let data = { Date: date,
-            Run: { Time: 0, Distance: 0, Cals: 0 },
-            Swim: { Time: 0, Distance: 0, Cals: 0 },
-            Bike: { Time: 0, Distance: 0, Cals: 0 },
-            Workout: { Time: 0, Distance: 0, Cals: 0 },
-            Username: username}
-
-        dbo.collection("Entries").insert(data, function(err, result) {
+        dbo.collection("Users").insertOne(user, function(err, res) {
             if (err) throw err;
-
-            callback(result)
-        
+            console.log("Inserted");
+            db.close();
         });
+
+        callback('Registered')
 
         db.close();
     })
 }
 
-module.exports = insertDaily;
+module.exports = register;

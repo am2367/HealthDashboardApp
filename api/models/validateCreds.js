@@ -1,4 +1,6 @@
-const insertDaily = (req, username, callback) => {
+var session = require('express-session')
+
+const validateCreds = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
@@ -8,8 +10,10 @@ const insertDaily = (req, username, callback) => {
     else{
         var url = "mongodb://localhost:27017/myapp";
     }
-
     MongoClient.connect(url, function(err, db) {
+        var query = {username: req.username, password: req.password}
+
+        if (err) throw err;
         console.log("Database Connected!");
         
         if(process.env.mLabUser){
@@ -19,24 +23,21 @@ const insertDaily = (req, username, callback) => {
             var dbo = db.db("myapp")
         }
 
-        let date = new Date(req.date)
-
-        let data = { Date: date,
-            Run: { Time: 0, Distance: 0, Cals: 0 },
-            Swim: { Time: 0, Distance: 0, Cals: 0 },
-            Bike: { Time: 0, Distance: 0, Cals: 0 },
-            Workout: { Time: 0, Distance: 0, Cals: 0 },
-            Username: username}
-
-        dbo.collection("Entries").insert(data, function(err, result) {
+        dbo.collection("Users").find(query).toArray(function myFunc(err, result) {
             if (err) throw err;
-
-            callback(result)
+            
+            if(result.length){
+                console.log(result)
+                callback('Correct');
+            }
+            else{
+                console.log(result)
+                callback('Incorrect');
+            }    
         
+            db.close();
         });
-
-        db.close();
-    })
+    });
 }
 
-module.exports = insertDaily;
+module.exports = validateCreds;

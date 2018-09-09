@@ -9,6 +9,8 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import DayCard from './DayCard.js'
 import moment from 'moment';
+import checkSession from './CheckSession.js'
+import { withRouter } from 'react-router'
 
 const styles = theme => ({
     root: {
@@ -41,8 +43,21 @@ class Daily extends React.Component {
       }
       return response;
   }
+
   componentWillMount = () => {
-      this.getData()
+    let props = this.props
+    let thisRef = this
+    checkSession(function(result){
+      if(result == false){
+        props.redirect();
+      }
+      else{
+        thisRef.getData()
+      }
+    })
+
+    
+      
   }
 
   getDate = (day) => {
@@ -89,5 +104,5 @@ class Daily extends React.Component {
 }
   
 const dailyWrapped = withStyles(styles)(Daily);
-
-export default dailyWrapped;
+const dailyWrappedWithRouter = withRouter(dailyWrapped)
+export default dailyWrappedWithRouter;

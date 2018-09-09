@@ -50,7 +50,7 @@ class DayCard extends React.Component {
     state = {data: this.props.data,
              editable: false,
             temp: []}
-
+    
     edit = () => {
         if(this.state.editable){
             this.setState({editable: false})
@@ -75,6 +75,7 @@ class DayCard extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
+        
         this.setState({data: nextProps.data})
     }
 

@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import DayModal from './DayModal.js';
 import moment from 'moment';
 import MonthlyCard from './MonthlyCard.js';
+import checkSession from './CheckSession.js'
+import { withRouter } from 'react-router'
 
 const styles = theme => ({
     root: {
@@ -44,6 +46,16 @@ class Monthly extends React.Component {
 
     close = () => {
       this.setState({open: false})
+    }
+
+    componentWillMount = () => {
+      let props = this.props
+      checkSession(function(result){
+        if(result == false){
+          props.redirect();
+        }
+      })
+        
     }
 
     getData = (i) => {
@@ -96,5 +108,5 @@ class Monthly extends React.Component {
 }
   
 const monthlyWrapped = withStyles(styles)(Monthly);
-
-export default monthlyWrapped;
+const monthlyWrappedWithRouter = withRouter(monthlyWrapped)
+export default monthlyWrappedWithRouter;

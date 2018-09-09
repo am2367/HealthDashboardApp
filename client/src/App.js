@@ -9,14 +9,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import Weekly from './Weekly.js';
-import Monthly from './Monthly.js';
-import Daily from './Daily.js';
+import Login from './Login.js';
+import Register from './Register.js';
+import Dashboard from './Dashboard.js';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    padding: 10
+    flexGrow: 1
   },
   Card: {
     padding: theme.spacing.unit * 2,
@@ -35,52 +34,47 @@ const styles = theme => ({
   }
 });
 
-class Dashboard extends React.Component {
-  state = {clicked: ''}
+class App extends React.Component {
+  state = {loggedIn: false}
 
   weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-  showDaily = () => {
-    return(<Daily weekdays={this.weekdays}/>)
+  showDash = () => {
+    return(<Dashboard weekdays={this.weekdays} loggedIn={this.state.loggedIn}/>)
   };
 
-  showWeekly = () => {
-    return(<Weekly weekdays={this.weekdays}/>)
-  }
-
-  showMonthly = () => {
-    return(<Monthly weekdays={this.weekdays}/>)
+  showLogin = () => {
+    return(<Login handleLogin={this.handleLogin}/>)
   };
 
-  viewChange = (view) => {
-    this.setState({clicked: view})
+  showRegister = () => {
+    return(<Register />)
+  };
+
+  handleLogin = () => {
+    this.setState({loggedIn: true}) 
   }
+
+  handleLogout = () => {
+    this.setState({loggedIn: false}) 
+  }
+
+  
 
   render(){
     const { classes } = this.props;
 
     return (
       <Router>
-      <div className={classes.root}>
-        <Grid container spacing={24}>
-          <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-            <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Daily">Daily</Link></Button>
-          </Grid>
-          <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-            <Button onClick={() => {this.viewChange('Weekly')}} style={{backgroundColor: this.state.clicked=='Weekly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Weekly">Weekly</Link></Button>
-          </Grid>
-          <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-            <Button onClick={() => {this.viewChange('Monthly')}} style={{backgroundColor: this.state.clicked=='Monthly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Monthly">Monthly</Link></Button>
-          </Grid>
-          <Route path="/Daily" component={this.showDaily} />
-          <Route path="/Weekly" component={this.showWeekly} />
-          <Route path="/Monthly" component={this.showMonthly} />
-        </Grid>      
-      </div>
-    </Router>  
-    )
+        <div className={classes.root}>
+          <Route path="/Dashboard"  component={this.showDash} />
+          <Route path="/Login" component={this.showLogin} />
+          <Route path="/Register" component={this.showRegister} />   
+        </div>
+      </Router>  
+      )
+    }
   }
-}
-const dashboardWrapped = withStyles(styles)(Dashboard);
+const appWrapped = withStyles(styles)(App);
 
-export default dashboardWrapped;
+export default appWrapped;

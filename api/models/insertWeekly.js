@@ -1,9 +1,9 @@
-const insertWeekly = (req, callback) => {
+const insertWeekly = (req, username, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
-        let username = process.env.mLabUser;
-        let password = process.env.mLabPassword;
-        var url = "mongodb://" + username + ':' + password + "@ds119052.mlab.com:19052/mydb";
+        let dbUsername = process.env.mLabUser;
+        let dbPassword = process.env.mLabPassword;
+        var url = "mongodb://" + dbUsername + ':' + dbPassword + "@ds119052.mlab.com:19052/mydb";
     }
     else{
         var url = "mongodb://localhost:27017/myapp";
@@ -12,7 +12,12 @@ const insertWeekly = (req, callback) => {
     MongoClient.connect(url, function(err, db) {
         console.log("Database Connected!");
         
-        var dbo = db.db("mydb");
+        if(process.env.mLabUser){
+            var dbo = db.db("mydb");
+        }
+        else{
+            var dbo = db.db("myapp")
+        }
 
         var insertList = []
 
@@ -31,7 +36,8 @@ const insertWeekly = (req, callback) => {
                 Run: { Time: 0, Distance: 0, Cals: 0 },
                 Swim: { Time: 0, Distance: 0, Cals: 0 },
                 Bike: { Time: 0, Distance: 0, Cals: 0 },
-                Workout: { Time: 0, Distance: 0, Cals: 0 }},{upsert: true}, function(err, result) {
+                Workout: { Time: 0, Distance: 0, Cals: 0 },
+                Username: username},{upsert: true}, function(err, result) {
                 if (err) throw err;
     
                 //callback(result)
