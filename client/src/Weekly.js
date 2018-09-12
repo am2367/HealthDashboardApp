@@ -35,7 +35,7 @@ const styles = theme => ({
   });
 
 class Weekly extends React.Component {
-    state = {data: []}
+    state = {data: this.props.data, week: moment().startOf("isoWeek").format()}
     
     handleErrors = (response) => {
         if (!response.ok) {
@@ -52,26 +52,36 @@ class Weekly extends React.Component {
             props.redirect();
         }
         else{
-            thisRef.getData()
+            //thisRef.getData()
+            if(props.data){
+                thisRef.setState({data: props.data})
+            }
+            else{
+                props.getData();
+            }
         }
         })
 
     }
 
+    componentWillReceiveProps = (nextProps) => {
+        this.setState({data: nextProps.data})
+    }
+
     getDate = (day) => {
-        return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
-      }
+        //let dayInt = moment().format('DD') * 1 + day
+        //let dayOfWeek = moment(this.state.data[dayInt]['Date']).format('dddd')
+        //return(dayOfWeek + ' ' + moment(this.state.data[(moment().format('DD') * 1) + day - 1]['Date']).format("YYYY-MM-DD"))
+        let date = moment(this.state.week).add(day, 'd');
+        let dayOfWeek = moment(date).format('dddd')
+        return(dayOfWeek + ' ' + moment(date).format("YYYY-MM-DD"))
+    }
 
     getData = () => {
         console.log('request')
-        /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-            var url = new URL("http://localhost:4200/api/getStats/Weekly");
-        }else{
-            var url = new URL("https://healthdashboardapp.herokuapp.com/api/getStats/Weekly");
-        }*/
+
         let dateStart = moment().startOf("isoWeek").format() 
         let dateEnd = moment().endOf("isoWeek").format()
-        //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
         fetch('/api/getStats/Weekly?dateStart=' + dateStart + '&dateEnd=' + dateEnd)
         .then(this.handleErrors)
@@ -85,27 +95,37 @@ class Weekly extends React.Component {
         })
     }
 
-    render() {
-        const { classes } = this.props;
-        let daysTop = [];
-        let daysBottom = [];
-        let daysEmpty = [];
-        var startOfWeek = moment().startOf("'isoWeek'").toDate();
 
+    daysTop = () => {
+        let startOfWeek = moment().startOf("isoWeek").toDate();
+        console.log(startOfWeek)
+        let days = []
         for(var i=0; i < 3; i++){
-            let day = moment().startOf("'isoWeek'").add(i, 'day').toDate();
-            daysTop.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+            days.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                             <h1>{this.state['data'].length > 0 ? this.getDate(i) : ''}</h1>
-                            <DayCard weekdays={this.props.weekdays} index={i} date={day} data={this.state.data}/>
+                            <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(i, 'd').format("DD") * 1 - 1} data={this.state.data}/>
                         </Grid>);
         }
+        return(days)
+    }
+
+    daysBottom = () => {
+        let startOfWeek = moment().startOf("isoWeek").toDate();
+        let days = []
         for(var x=3; x < 7; x++){
-            let day = moment().startOf("'isoWeek'").add(x, 'day').toDate();
-            daysBottom.push(<Grid item sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
+            days.push(<Grid item sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
                                 <h1>{this.state['data'].length > 0 ? this.getDate(x) : ''}</h1>
-                                <DayCard weekdays={this.props.weekdays} index={x} date={day} data={this.state.data}/>
+                                <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(x, 'd').format("DD") * 1 - 1} data={this.state.data}/>
                             </Grid>);
         }
+        return(days)
+    }
+
+    render() {
+        const { classes } = this.props;
+ 
+        let daysEmpty = [];
+
         for(var i=0; i < 3; i++){
             daysEmpty.push(<Grid item sm={4} md={4} lg={4}>
                              <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
@@ -118,7 +138,7 @@ class Weekly extends React.Component {
         }
 
         if (this.state['data'].length > 0){
-            return (<div className={classes.root}><Grid container spacing={24}>{daysTop}</Grid><Grid container spacing={24}>{daysBottom}</Grid></div>)
+            return (<div className={classes.root}><Grid container spacing={24}>{this.daysTop()}</Grid><Grid container spacing={24}>{this.daysBottom()}</Grid></div>)
         }
         else{
             return(<div className={classes.root}><Grid container spacing={24}>{daysEmpty}</Grid></div>)

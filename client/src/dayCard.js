@@ -49,7 +49,8 @@ const styles = theme => ({
 class DayCard extends React.Component {
     state = {data: this.props.data,
              editable: false,
-            temp: []}
+             index: this.props.index,
+             temp: []}
     
     edit = () => {
         if(this.state.editable){
@@ -67,7 +68,7 @@ class DayCard extends React.Component {
 
     handleChange = (id, item, event) => {
         let temp = this.state.data;
-        temp[this.props.index][id][item] = event.target.value
+        temp[this.state.index][id][item] = event.target.value
         
         //change editable state twice to update stateless input
         this.setState({editable: false})
@@ -75,8 +76,7 @@ class DayCard extends React.Component {
     }
 
     componentWillReceiveProps(nextProps){
-        
-        this.setState({data: nextProps.data})
+        this.setState({data: nextProps.data, index: nextProps.index})
     }
 
     handleErrors = (response) => {
@@ -87,20 +87,17 @@ class DayCard extends React.Component {
     }
 
     save = () => {
-        /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-            var url = new URL("http://localhost:4200/api/setStats/Weekly");
-        }else{
-            var url = new URL("https://healthdashboardapp.herokuapp.com/api/setStats/Weekly");
-        }*/
-        fetch('/api/setStats/Weekly', {
+
+
+        fetch('/api/setStats', {
             method: 'post',
             headers: {
                 'Content-type': 'application/json'},
             body: JSON.stringify({
-                    Date: new Date(this.state.data[this.props.index]['Date']),
-                    Run: this.state.data[this.props.index]['Run'],
-                    Swim: this.state.data[this.props.index]['Swim'],
-                    Bike: this.state.data[this.props.index]['Bike'],
+                    Date: new Date(this.state.data[this.state.index]['Date']),
+                    Run: this.state.data[this.state.index]['Run'],
+                    Swim: this.state.data[this.state.index]['Swim'],
+                    Bike: this.state.data[this.state.index]['Bike'],
                     Workout: this.state.data[this.props.index]['Workout']})
         })
         .then(response => response.json())
@@ -114,7 +111,8 @@ class DayCard extends React.Component {
 
     render() {
         const { classes } = this.props;
-        console.log(this.state.data)
+        //console.log(this.state.data)
+        console.log(this.state.index)
         const field = (id, item) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center'}}>
                 <TextField
@@ -123,16 +121,15 @@ class DayCard extends React.Component {
                 type="number"
                 fullWidth={true}
                 label=''
-                value={this.state.data[this.props.index][id][item]}
+                value={this.state.data[this.state.index][id][item]}
                 onChange={(e) => this.handleChange(id, item, e)}
                 style={{width: '50px'}}
                 />
             </TableCell>
         )
-
         const dataCell = (id, item) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center'}}>
-                {this.state.data[this.props.index][id][item]}
+                {this.state.data[this.state.index][id][item]}
             </TableCell>
         )
         if (Object.keys(this.state.data).length != 0){

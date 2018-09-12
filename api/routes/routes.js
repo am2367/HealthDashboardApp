@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const setStats = require('../models/setStats.js');
 const getWeekly = require('../models/getWeekly.js');
-const setWeekly = require('../models/setWeekly.js');
+const getMonthly = require('../models/getMonthly.js');
+const insertMonthly = require('../models/insertMonthly.js');
 const insertWeekly = require('../models/insertWeekly.js');
 const insertDaily = require('../models/insertDaily.js');
 const getDaily = require('../models/getDaily.js');
@@ -112,15 +114,41 @@ router.get('/api/getStats/Weekly', (req, res) => {
 });
 
 //set weekly stats
-router.post('/api/setStats/Weekly', (req, res) => {
+router.post('/api/setStats', (req, res) => {
     console.log(req.body)
 
     if(req.session.username){
 
-        setWeekly(req.body, function(result){
-            //console.log(result)
+        setStats(req.body, req.session.username, function(result){
+            console.log(result)
 
             res.json(result)
+        })
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
+//get monthly stats
+router.get('/api/getStats/Monthly', (req, res) => {
+    console.log(req.query)
+
+    if(req.session.username){
+
+        getMonthly(req.query, req.session.username, function(result){
+            //console.log(result)
+
+            if(result == 'Missing Days'){
+
+                insertMonthly(req.query, req.session.username, function(result){
+                    //console.log(result)
+                    res.json('Inserted!')
+                })
+            }
+            else{
+                res.json(result)
+            }
         })
     }
     else{

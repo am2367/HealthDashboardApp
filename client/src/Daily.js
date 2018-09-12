@@ -10,6 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import DayCard from './DayCard.js'
 import moment from 'moment';
 import checkSession from './CheckSession.js'
+import Left from '@material-ui/icons/ChevronLeft';
+import Right from '@material-ui/icons/ChevronRight';
 import { withRouter } from 'react-router'
 
 const styles = theme => ({
@@ -35,7 +37,7 @@ const styles = theme => ({
   });
 
 class Daily extends React.Component {
-  state = {data: []}
+  state = {data: this.props.data, date: moment(new Date()).format('YYYY-MM-DD')}
     
   handleErrors = (response) => {
       if (!response.ok) {
@@ -48,28 +50,42 @@ class Daily extends React.Component {
     let props = this.props
     let thisRef = this
     checkSession(function(result){
-      if(result == false){
+    if(result == false){
         props.redirect();
-      }
-      else{
-        thisRef.getData()
-      }
+    }
+    else{
+        //thisRef.getData()
+        if(props.data){
+            thisRef.setState({data: props.data})
+        }
+        else{
+            props.getData();
+        }
+    }
     })
+  }
 
-    
-      
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({data: nextProps.data})
+    }
+
+  next = () => {
+    let tempDate = this.state.date
+    let newDate = moment(tempDate).add(1, 'd').format('YYYY-MM-DD');
+    this.setState({date: newDate})
+  }
+
+  previous = () => {
+    let tempDate = this.state.date
+    let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
+    this.setState({date: newDate})
   }
 
   getDate = (day) => {
-    return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
+    return(this.props.weekdays[moment(this.state.day[day-1]['Date']).isoWeekday()-1] + ' ' + moment(this.state.day[day-1]['Date']).format("YYYY-MM-DD") )
   }
 
   getData = () => {
-    /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-        var url = new URL("http://localhost:4200/api/getStats/Weekly");
-    }else{
-        var url = new URL("https://healthdashboardapp.herokuapp.com/api/getStats/Weekly");
-    }*/
      
     let dateStart = moment().startOf("isoWeek").format() 
     let dateEnd = moment().endOf("isoWeek").format()
@@ -88,14 +104,21 @@ class Daily extends React.Component {
   }
     render() {
         const { classes } = this.props;
-        let day = moment().isoWeekday() - 1;
         
          return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
                     {this.state.data.length > 0 
                         ?
                         <div>
-                            <h1>{this.state['data'].length > 0 ? this.getDate(day) : ''}</h1>
-                            <DayCard weekdays={this.props.weekdays} index={day} data={this.state.data}/>
+                            <h1>
+                                <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
+                                {this.state.data ? (moment(this.state.date).format('dddd') + '' + this.state.date) : ''}
+                                <Right style={{cursor: 'pointer'}} onClick={this.next}/>
+                            </h1>
+                            <DayCard 
+                                weekdays={this.props.weekdays} 
+                                index={moment(this.state.date).format('DD') * 1 - 1} 
+                                data={this.state.data}
+                            />
                         </div>
                         : 
                         <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>}

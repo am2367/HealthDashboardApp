@@ -1,4 +1,4 @@
-const setWeekly = (req, callback) => {
+const setStats = (req, username, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
@@ -20,13 +20,12 @@ const setWeekly = (req, callback) => {
             var dbo = db.db("myapp")
         }
 
-        var myquery = {Date: new Date(req.Date)};
+        var myquery = {Date: new Date(req.Date), Username: username};
         console.log(req.Date)
         console.log(myquery)
         var newvalues = { $set: {Run: req.Run, Swim: req.Swim, Bike: req.Bike, Workout: req.Workout}};
         dbo.collection("Entries").updateOne(myquery, newvalues, function(err, result) {
             if (err) throw err;
-
             callback('Saved!')
         });
 
@@ -37,4 +36,4 @@ const setWeekly = (req, callback) => {
     
 }
 
-module.exports = setWeekly;
+module.exports = setStats;

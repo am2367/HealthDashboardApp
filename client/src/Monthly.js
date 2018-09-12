@@ -39,9 +39,10 @@ class Monthly extends React.Component {
 
     state={open: false, 
            openDay: 0,
-           data: ''}
+           data: this.props.data}
+
     open = (i) => {
-      this.setState({open: true, openDay: i, data: []}, () => this.getData(i))
+      this.setState({open: true, openDay: i, data: this.props.data})
     }
 
     close = () => {
@@ -49,37 +50,29 @@ class Monthly extends React.Component {
     }
 
     componentWillMount = () => {
-      let props = this.props
-      checkSession(function(result){
+        let props = this.props
+        let thisRef = this
+        checkSession(function(result){
         if(result == false){
-          props.redirect();
+            props.redirect();
         }
-      })
-        
-    }
-
-    getData = (i) => {
-      /*if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"){
-          var url = new URL("http://localhost:4200/api/getStats/Weekly");
-      }else{
-          var url = new URL("https://healthdashboardapp.herokuapp.com/api/getStats/Weekly");
-      }*/
-      let date = moment().startOf("month").add(i, 'day').toDate().toISOString();
-        //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
-        fetch('/api/getStats/Daily?date=' + date)
-        .then(this.handleErrors)
-        .then(response => response.json())
-        .then(data=>{
-            if(data == 'Inserted!'){
-                this.getData(i)
-            }else{
-                let data1 = data[0]
-                let temp = {[i]: data1}
-                this.setState({data: temp})
+        else{
+            //thisRef.getData()
+            if(props.data){
+                thisRef.setState({data: props.data})
             }
+            else{
+                props.getData();
+            }
+        }
         })
+
     }
+
+    componentWillReceiveProps = (nextProps) => {
+      this.setState({data: nextProps.data})
+  }
+
 
     render() {
         const { classes } = this.props;
@@ -92,19 +85,23 @@ class Monthly extends React.Component {
         let days = []
         let daysEmpty = []
 
-        for(var i=0; i < dayCount; i++){
+        for(var i=0; i < dayCount-1; i++){
           
           days.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><MonthlyCard setClose={()=>{this.close()}} setOpen={(i)=>{this.open(i)}} index={i} data={this.state.data}/></Grid>);
         }
 
-        /*for(var i=0; i < dayCount; i++){
+        for(var i=0; i < dayCount-1; i++){
           
-          daysEmpty.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/></Grid>);
-        }*/
+          daysEmpty.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '15rem', width: '100%'}}/></Grid>);
+        }
         
-
-        return (<div className={classes.root}><Grid container spacing={24}><DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.state.data}/>{days}</Grid></div>)
-    }
+        if (this.state['data'].length > 0){
+          return (<div className={classes.root}><Grid container spacing={24}><DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.state.data}/>{days}</Grid></div>)
+        }
+        else{
+          return (<div className={classes.root}><Grid container spacing={24}><DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.state.data}/>{daysEmpty}</Grid></div>)
+        }
+    } 
 }
   
 const monthlyWrapped = withStyles(styles)(Monthly);

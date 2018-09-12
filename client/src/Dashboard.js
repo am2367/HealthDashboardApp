@@ -13,7 +13,8 @@ import Weekly from './Weekly.js';
 import Monthly from './Monthly.js';
 import Daily from './Daily.js';
 import TopNav from './TopNav.js'
-import checkSession from './CheckSession.js'
+import checkSession from './CheckSession.js';
+import moment from 'moment';
 
 const styles = theme => ({
   root: {
@@ -38,7 +39,7 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
-  state = {loggedIn: false}
+  state = {loggedIn: false, data: []}
 
   weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -48,9 +49,32 @@ class Dashboard extends React.Component {
       if(result == false){
         thisRef.redirect()
       }
+      else{
+          thisRef.getData()
+      }
     })
       
   }
+
+  getData = () => {
+    console.log('request')
+
+    let dateStart = moment().startOf("month").format() 
+    let dateEnd = moment().endOf("month").format()
+
+    fetch('/api/getStats/Monthly?dateStart=' + dateStart + '&dateEnd=' + dateEnd)
+    .then(this.handleErrors)
+    .then(response => response.json())
+    .then(data=>{
+        if(data == 'Inserted!'){
+            console.log(data)
+            this.getData()
+        }else{
+            this.setState({data: data})
+        }
+    })
+}
+
 
   redirect = () => {
     this.props.history.push('/Login');
@@ -58,15 +82,33 @@ class Dashboard extends React.Component {
 
 
   showDaily = () => {
-    return(<Daily redirect={this.redirect} weekdays={this.weekdays} loggedIn={this.state.loggedIn}/>)
+    return(<Daily 
+                redirect={this.redirect} 
+                weekdays={this.weekdays} 
+                loggedIn={this.state.loggedIn}
+                data={this.state.data}
+                getData={this.getData}
+            />)
   };
 
   showWeekly = () => {
-    return(<Weekly redirect={this.redirect} weekdays={this.weekdays} loggedIn={this.state.loggedIn}/>)
+    return(<Weekly 
+                redirect={this.redirect} 
+                weekdays={this.weekdays} 
+                loggedIn={this.state.loggedIn}
+                data={this.state.data}
+                getData={this.getData}
+            />)
   }
 
   showMonthly = () => {
-    return(<Monthly redirect={this.redirect} weekdays={this.weekdays} loggedIn={this.state.loggedIn}/>)
+    return(<Monthly 
+                redirect={this.redirect} 
+                weekdays={this.weekdays} 
+                loggedIn={this.state.loggedIn}
+                data={this.state.data}
+                getData={this.getData}
+            />)
   };
 
   viewChange = (view) => {

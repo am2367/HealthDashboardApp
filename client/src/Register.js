@@ -99,10 +99,14 @@ class Register extends React.Component {
 
     handleChange = name => event => {
         this.setState({
-          [name]: event.target.value,
+            [name]: event.target.value,
         });
-      };
+    };
     
+    login = () => {
+        this.props.history.push('/Login')
+    }
+
     handleRegister = (event) => {
         event.preventDefault();
         var data = this.validation();
@@ -296,8 +300,11 @@ class Register extends React.Component {
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <div style={{textAlign: "center"}}>
-                                <Button id="register" className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                <Button id="register" className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
                                 Register
+                                </Button>
+                                <Button id='login' className={classes.button} onClick={this.login} style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                Login
                                 </Button>
                             </div>
                         </FormControl>

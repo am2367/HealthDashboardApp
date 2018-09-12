@@ -97,6 +97,10 @@ class Login extends React.Component {
         this.setState({ showPassword: !this.state.showPassword });
     };
 
+    register = () => {
+        this.props.history.push('/Register')
+    }
+
     handleChange = name => event => {
         this.setState({
           [name]: event.target.value,
@@ -196,8 +200,11 @@ class Login extends React.Component {
                         </FormControl>
                         <FormControl className={classes.formControl}>
                             <div style={{textAlign: "center"}}>
-                                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
                                 Login
+                                </Button>
+                                <Button id='register' className={classes.button} onClick={this.register} style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                Register
                                 </Button>
                             </div>
                         </FormControl>
