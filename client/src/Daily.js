@@ -105,15 +105,21 @@ class Daily extends React.Component {
     render() {
         const { classes } = this.props;
         
-         return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
+         return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto', display: 'flex'}}>
                     {this.state.data.length > 0 
                         ?
                         <div>
-                            <h1>
-                                <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
-                                {this.state.data ? (moment(this.state.date).format('dddd') + '' + this.state.date) : ''}
-                                <Right style={{cursor: 'pointer'}} onClick={this.next}/>
-                            </h1>
+                            <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto'}}>
+                                <Grid item sm={2} md={2} lg={2} >
+                                    <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
+                                </Grid>
+                                <Grid item sm={8} md={8} lg={8}>
+                                    {this.state.data ? (moment(this.state.date).format('dddd') + ' ' + this.state.date) : ''}
+                                </Grid>
+                                <Grid item sm={2} md={2} lg={2} >
+                                    <Right style={{cursor: 'pointer'}} onClick={this.next}/>
+                                </Grid>
+                            </Grid>
                             <DayCard 
                                 weekdays={this.props.weekdays} 
                                 index={moment(this.state.date).format('DD') * 1 - 1} 

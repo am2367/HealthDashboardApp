@@ -50,14 +50,30 @@ class Dashboard extends React.Component {
         thisRef.redirect()
       }
       else{
-          thisRef.getData()
+          thisRef.getUsername();
+          thisRef.getData();
       }
     })
       
   }
 
+  getUsername = () => {
+    fetch('/api/getUsername')
+    .then(this.handleErrors)
+    .then(response => response.json())
+    .then(data=>{
+        if(data){
+            //console.log(data)
+            this.setState({username: data})
+        }else{
+            this.props.history.push('/Login');
+            alert('Ran into an error, please login again.')
+        }
+    })
+  }
+
   getData = () => {
-    console.log('request')
+    //console.log('request')
 
     let dateStart = moment().startOf("month").format() 
     let dateEnd = moment().endOf("month").format()
@@ -67,13 +83,13 @@ class Dashboard extends React.Component {
     .then(response => response.json())
     .then(data=>{
         if(data == 'Inserted!'){
-            console.log(data)
+            //console.log(data)
             this.getData()
         }else{
             this.setState({data: data})
         }
     })
-}
+    }
 
 
   redirect = () => {
@@ -121,7 +137,7 @@ class Dashboard extends React.Component {
     return (
       <Router>
         <div className={classes.root}>
-          <TopNav redirect={this.redirect}/>
+          <TopNav redirect={this.redirect} username={this.state.username}/>
           <Grid container spacing={24} style={{marginTop: '1%'}}>
             <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
               <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Daily">Daily</Link></Button>

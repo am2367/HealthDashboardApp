@@ -31,6 +31,7 @@ class MenuAppBar extends React.Component {
   state = {
     auth: true,
     anchorEl: null,
+    username: this.props.username
   };
 
   handleMenu = event => {
@@ -41,12 +42,16 @@ class MenuAppBar extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  componentWillReceiveProps = (nextProps) => {
+      this.setState({username: nextProps.username})
+  }
+
   logout = () => {
     fetch('/api/logout')
         .then(this.handleErrors)
         .then(response => response.json())
         .then(data=>{
-            console.log(data)
+            //console.log(data)
             if(data == 'Logged Out'){
                 alert("Logged Out!")
                 this.props.redirect()
@@ -78,6 +83,7 @@ class MenuAppBar extends React.Component {
                   color="inherit"
                 >
                   <AccountCircle />
+                  {this.state.username}
                 </IconButton>
                 <Menu
                   id="menu-appbar"

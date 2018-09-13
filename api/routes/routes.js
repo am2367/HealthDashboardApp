@@ -13,7 +13,7 @@ const path = require('path');
 
 //login
 router.post('/api/login', (req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
     validateCreds(req.body, function(result){
         //console.log(result)
         if(result == 'Correct'){
@@ -29,7 +29,7 @@ router.post('/api/login', (req, res) => {
 
 //logout
 router.get('/api/logout', (req, res) => {
-    console.log(req.query)
+    //console.log(req.query)
     req.session.username = null
     res.json('Logged Out')
 });
@@ -42,6 +42,17 @@ router.get('/api/checkSession', (req, res) => {
     }
     else{
         res.json('Inactive')
+    }
+});
+
+//get username
+router.get('/api/getUsername', (req, res) => {
+    //console.log(req.query)
+    if(req.session.username){
+        res.json(req.session.username)
+    }
+    else{
+        res.json(false)
     }
 });
 

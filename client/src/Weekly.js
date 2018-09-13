@@ -77,8 +77,8 @@ class Weekly extends React.Component {
         return(dayOfWeek + ' ' + moment(date).format("YYYY-MM-DD"))
     }
 
-    getData = () => {
-        console.log('request')
+    /*getData = () => {
+        //console.log('request')
 
         let dateStart = moment().startOf("isoWeek").format() 
         let dateEnd = moment().endOf("isoWeek").format()
@@ -93,12 +93,12 @@ class Weekly extends React.Component {
                 this.setState({data: data})
             }
         })
-    }
+    }*/
 
 
     daysTop = () => {
         let startOfWeek = moment().startOf("isoWeek").toDate();
-        console.log(startOfWeek)
+        //console.log(startOfWeek)
         let days = []
         for(var i=0; i < 3; i++){
             days.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
