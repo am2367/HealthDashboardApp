@@ -24,6 +24,7 @@ const styles = theme => ({
       padding: theme.spacing.unit * 2,
       textAlign: 'center',
       color: theme.palette.text.secondary,
+      backgroundColor: '#ffffff96'
     },
     viewButtons: {
       backgroundColor: '#14e4ff',
@@ -83,6 +84,34 @@ class Daily extends React.Component {
     let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
     this.setState({date: newDate})
   }
+
+    next = () => {
+        let thisRef = this
+        let tempDate = this.state.date
+        if(this.state.data[moment(tempDate).add(1, 'd').format('YYYY')]){
+        let newDate = moment(tempDate).add(1, 'd').format('YYYY-MM-DD');
+        this.setState({date: newDate})    
+        }
+        else{
+        this.props.getMoreData(moment(tempDate).add(1, "d").format('YYYY'), function() {
+            thisRef.next();
+        })
+        }
+    }
+
+    previous = () => {
+        let thisRef = this
+        let tempDate = this.state.date
+        if(this.state.data[moment(tempDate).subtract(1, 'd').format('YYYY')]){
+            let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
+            this.setState({date: newDate})    
+        }
+        else{
+            this.props.getMoreData(moment(tempDate).subtract(1, "d").format('YYYY'), function(){
+                thisRef.previous();
+            })
+        }
+    }
 
   getDate = (day) => {
     return(this.props.weekdays[moment(this.state.day[day-1]['Date']).isoWeekday()-1] + ' ' + moment(this.state.day[day-1]['Date']).format("YYYY-MM-DD") )

@@ -144,8 +144,8 @@ class DayCard extends React.Component {
         if (this.state.data){
             return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
             {/*<CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>*/}
-            <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
-            <Button style={{backgroundColor: 'green', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
+            <Button style={{backgroundColor: this.state.editable ? '#ff0000b3' : '#008000b3'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
+            <Button style={{backgroundColor: '#008000b3', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
             <CardContent>
                 <Table>
                     <TableHead>

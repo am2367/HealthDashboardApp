@@ -19,7 +19,6 @@ import moment from 'moment';
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    padding: 10
   },
   Card: {
     padding: theme.spacing.unit * 2,
@@ -158,20 +157,20 @@ class Dashboard extends React.Component {
       <Router>
         <div className={classes.root}>
           <TopNav redirect={this.redirect} username={this.state.username}/>
-          <Grid container spacing={24} style={{marginTop: '1%'}}>
-            <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-              <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Daily">Daily</Link></Button>
+            <Grid container spacing={24}>
+              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+                <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Daily">Daily</Link></Button>
+              </Grid>
+              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+                <Button onClick={() => {this.viewChange('Weekly')}} style={{backgroundColor: this.state.clicked=='Weekly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Weekly">Weekly</Link></Button>
+              </Grid>
+              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+                <Button onClick={() => {this.viewChange('Monthly')}} style={{backgroundColor: this.state.clicked=='Monthly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Monthly">Monthly</Link></Button>
+              </Grid>
+              <Route path="/Dashboard/Daily" component={this.showDaily} />
+              <Route path="/Dashboard/Weekly" component={this.showWeekly} />
+              <Route path="/Dashboard/Monthly" component={this.showMonthly} />
             </Grid>
-            <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-              <Button onClick={() => {this.viewChange('Weekly')}} style={{backgroundColor: this.state.clicked=='Weekly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Weekly">Weekly</Link></Button>
-            </Grid>
-            <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-              <Button onClick={() => {this.viewChange('Monthly')}} style={{backgroundColor: this.state.clicked=='Monthly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Monthly">Monthly</Link></Button>
-            </Grid>
-            <Route path="/Dashboard/Daily" component={this.showDaily} />
-            <Route path="/Dashboard/Weekly" component={this.showWeekly} />
-            <Route path="/Dashboard/Monthly" component={this.showMonthly} />
-          </Grid>  
         </div>
       </Router>  
       )
