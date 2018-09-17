@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import DayCard from './DayCard.js'
 import moment from 'moment';
 import checkSession from './CheckSession.js'
+import isEmpty from './isEmpty.js'
 import Left from '@material-ui/icons/ChevronLeft';
 import Right from '@material-ui/icons/ChevronRight';
 import { withRouter } from 'react-router'
@@ -47,6 +48,7 @@ class Daily extends React.Component {
   }
 
   componentWillMount = () => {
+    //console.log(this.props.data)
     let props = this.props
     let thisRef = this
     checkSession(function(result){
@@ -54,8 +56,8 @@ class Daily extends React.Component {
         props.redirect();
     }
     else{
-        //thisRef.getData()
-        if(props.data){
+        if(!isEmpty(props.data)){
+            //console.log(props.data)
             thisRef.setState({data: props.data})
         }
         else{
@@ -67,6 +69,7 @@ class Daily extends React.Component {
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({data: nextProps.data})
+    //console.log(nextProps.data.length)
     }
 
   next = () => {
@@ -85,12 +88,19 @@ class Daily extends React.Component {
     return(this.props.weekdays[moment(this.state.day[day-1]['Date']).isoWeekday()-1] + ' ' + moment(this.state.day[day-1]['Date']).format("YYYY-MM-DD") )
   }
 
+  getDayData = () => {
+    //console.log(this.state.data)
+    let year = moment(this.state.date).format('YYYY');
+    let month = moment(this.state.date).format('M') * 1;
+    let day = moment(this.state.date).format('D') * 1;
+    //console.log(this.state.data[year][month][day])
+    return(this.state.data[year][month][day])
+  }
+
   getData = () => {
      
     let dateStart = moment().startOf("isoWeek").format() 
     let dateEnd = moment().endOf("isoWeek").format()
-      //Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-
       fetch('/api/getStats/Weekly?dateStart=' + dateStart + '&dateEnd=' + dateEnd)
       .then(this.handleErrors)
       .then(response => response.json())
@@ -103,18 +113,19 @@ class Daily extends React.Component {
       })
   }
     render() {
-        const { classes } = this.props;
-        
-         return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto', display: 'flex'}}>
-                    {this.state.data.length > 0 
-                        ?
+         const { classes } = this.props;
+
+         return(<div style={{textAlign: 'center', width: '70%', height: '100%', margin: 'auto'}}>
+                    {isEmpty(this.state.data) ?
+                        <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
+                        :
                         <div>
-                            <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto'}}>
+                            <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
                                 <Grid item sm={2} md={2} lg={2} >
                                     <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
                                 </Grid>
                                 <Grid item sm={8} md={8} lg={8}>
-                                    {this.state.data ? (moment(this.state.date).format('dddd') + ' ' + this.state.date) : ''}
+                                    {moment(this.state.date).format('dddd') + ' ' + this.state.date}
                                 </Grid>
                                 <Grid item sm={2} md={2} lg={2} >
                                     <Right style={{cursor: 'pointer'}} onClick={this.next}/>
@@ -123,11 +134,11 @@ class Daily extends React.Component {
                             <DayCard 
                                 weekdays={this.props.weekdays} 
                                 index={moment(this.state.date).format('DD') * 1 - 1} 
-                                data={this.state.data}
+                                data={this.getDayData()}
                             />
                         </div>
-                        : 
-                        <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>}
+                        
+                    }
                 </div>)
     }
 }

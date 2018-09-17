@@ -39,7 +39,7 @@ const styles = theme => ({
 });
 
 class Dashboard extends React.Component {
-  state = {loggedIn: false, data: []}
+  state = {loggedIn: false, data: {}, year: moment().format('YYYY')}
 
   weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
@@ -74,22 +74,39 @@ class Dashboard extends React.Component {
 
   getData = () => {
     //console.log('request')
-
-    let dateStart = moment().startOf("month").format() 
-    let dateEnd = moment().endOf("month").format()
-
-    fetch('/api/getStats/Monthly?dateStart=' + dateStart + '&dateEnd=' + dateEnd)
+    fetch('/api/getStats/Yearly?year=' + this.state.year)
     .then(this.handleErrors)
     .then(response => response.json())
     .then(data=>{
         if(data == 'Inserted!'){
-            //console.log(data)
+            console.log(data)
             this.getData()
         }else{
+            console.log(data)
             this.setState({data: data})
         }
     })
     }
+
+    getMoreData = (year) => {
+      //console.log('request')
+
+      fetch('/api/getStats/Yearly?year=' + year)
+      .then(this.handleErrors)
+      .then(response => response.json())
+      .then(data=>{
+          if(data == 'Inserted!'){
+              //console.log(data)
+              this.getMoreData(year)
+          }else{
+              //console.log(data)
+              let tempData = this.state.data
+              tempData = Object.assign(tempData, data);
+              console.log(tempData)
+              this.setState({data: tempData})
+          }
+      })
+      }
 
 
   redirect = () => {
@@ -104,6 +121,7 @@ class Dashboard extends React.Component {
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
+                getMoreData={this.getMoreData}
             />)
   };
 
@@ -114,6 +132,7 @@ class Dashboard extends React.Component {
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
+                getMoreData={this.getMoreData}
             />)
   }
 
@@ -124,6 +143,7 @@ class Dashboard extends React.Component {
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
+                getMoreData={this.getMoreData}
             />)
   };
 

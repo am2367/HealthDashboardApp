@@ -1,6 +1,6 @@
 const moment =  require('moment');
 
-const getMonthly = (req, username,callback) => {
+const getYearly = (year, username,callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
@@ -11,15 +11,11 @@ const getMonthly = (req, username,callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
-        //var query = {Date: { $gte: new Date(req.dateStart), $lte: new Date(req.dateEnd) } }
-        var query = {$and: 
-                        [{Date: 
-                            { $gte: new Date(req.dateStart), 
-                              $lte: new Date(req.dateEnd) } 
-                            }, 
-                            {Username: username}
+        var query = {$and:
+                        [{[year]: {$exists : true}}, 
+                         {Username: username}
                         ]};
-
+        
         if (err) throw err;
         console.log("Database Connected!");
         
@@ -32,18 +28,15 @@ const getMonthly = (req, username,callback) => {
 
         dbo.collection("Entries").find(query).toArray(function myFunc(err, result) {
             if (err) throw err;
-            
-            if(result.length >= 28){
-                //console.log(result)
-                callback(result);
+            if(result.length){
+                callback(result[0]);
             }
             else{
-                callback('Missing Days')
-            }    
-        
+                callback('Empty')
+            }
             db.close();
         });
     });
 }
 
-module.exports = getMonthly;
+module.exports = getYearly;

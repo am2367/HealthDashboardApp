@@ -1,3 +1,5 @@
+const moment =  require('moment');
+
 const setStats = (req, username, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
@@ -20,10 +22,14 @@ const setStats = (req, username, callback) => {
             var dbo = db.db("myapp")
         }
 
-        var myquery = {Date: new Date(req.Date), Username: username};
-        console.log(req.Date)
-        console.log(myquery)
-        var newvalues = { $set: {Run: req.Run, Swim: req.Swim, Bike: req.Bike, Workout: req.Workout}};
+        let year = moment(req.year).format('YYYY');
+        let month = moment(req.year).format('M') * 1;
+        let day = moment(req.year).format('D') * 1;
+
+        var myquery = {[year + '.' + month + '.' + day]: Object, Username: username};
+
+        //console.log(myquery)
+        var newvalues = { $set: {[year + '.' + month + '.' + day]: {Date: req.Date, Run: req.Run, Swim: req.Swim, Bike: req.Bike, Workout: req.Workout}}};
         dbo.collection("Entries").updateOne(myquery, newvalues, function(err, result) {
             if (err) throw err;
             callback('Saved!')

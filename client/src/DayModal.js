@@ -26,7 +26,7 @@ class DayModal extends React.Component {
   }
 
   getDate = (day) => {
-    return(this.props.weekdays[moment(this.state.data[day]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[day]['Date']).format("YYYY-MM-DD") )
+    return(this.props.weekdays[moment(this.state.data['Date']).isoWeekday()-1] + ' ' + moment(this.state.data['Date']).format("YYYY-MM-DD") )
   }
 
   render() {
@@ -41,7 +41,7 @@ class DayModal extends React.Component {
           onClose={this.handleClose}
         >
           <div style={{textAlign: 'center', backgroundColor: 'white'}}>
-            <h1>{Object.keys(this.state.data).length != 0 ? this.getDate(this.props.day) : ''}</h1>
+            <h1>{this.getDate(this.props.day)}</h1>
             <DayCard weekdays={this.props.weekdays} index={this.props.day} data={this.state.data}/>
           </div>
         </Modal>

@@ -19,6 +19,7 @@ import RunIcon from '@material-ui/icons/DirectionsRun';
 import SwimIcon from '@material-ui/icons/Pool';
 import BikeIcon from '@material-ui/icons/DirectionsBike';
 import WorkoutIcon from '@material-ui/icons/FitnessCenter';
+import { ListItemSecondaryAction } from "../node_modules/@material-ui/core";
 
 const styles = theme => ({
     root: {
@@ -68,7 +69,7 @@ class DayCard extends React.Component {
 
     handleChange = (id, item, event) => {
         let temp = this.state.data;
-        temp[this.state.index][id][item] = event.target.value
+        temp[id][item] = event.target.value
         
         //change editable state twice to update stateless input
         this.setState({editable: false})
@@ -86,6 +87,15 @@ class DayCard extends React.Component {
         return response;
     }
 
+    isTodayCard = () =>{
+        if(moment(this.state.data['Date']).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
     save = () => {
 
 
@@ -94,11 +104,11 @@ class DayCard extends React.Component {
             headers: {
                 'Content-type': 'application/json'},
             body: JSON.stringify({
-                    Date: new Date(this.state.data[this.state.index]['Date']),
-                    Run: this.state.data[this.state.index]['Run'],
-                    Swim: this.state.data[this.state.index]['Swim'],
-                    Bike: this.state.data[this.state.index]['Bike'],
-                    Workout: this.state.data[this.props.index]['Workout']})
+                    Date: new Date(this.state.data['Date']),
+                    Run: this.state.data['Run'],
+                    Swim: this.state.data['Swim'],
+                    Bike: this.state.data['Bike'],
+                    Workout: this.state.data['Workout']})
         })
         .then(response => response.json())
         .then(data=>{
@@ -112,7 +122,6 @@ class DayCard extends React.Component {
     render() {
         const { classes } = this.props;
         //console.log(this.state.data)
-        console.log(this.state.index)
         const field = (id, item) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center'}}>
                 <TextField
@@ -121,7 +130,7 @@ class DayCard extends React.Component {
                 type="number"
                 fullWidth={true}
                 label=''
-                value={this.state.data[this.state.index][id][item]}
+                value={this.state.data[id][item]}
                 onChange={(e) => this.handleChange(id, item, e)}
                 style={{width: '50px'}}
                 />
@@ -129,11 +138,11 @@ class DayCard extends React.Component {
         )
         const dataCell = (id, item) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center'}}>
-                {this.state.data[this.state.index][id][item]}
+                {this.state.data[id][item]}
             </TableCell>
         )
-        if (Object.keys(this.state.data).length != 0){
-            return (<Card style={{backgroundColor: (moment().format('dddd') == this.props.weekdays[this.props.index]) ? '#14e4ff' : ''}} className={classes.Card}>
+        if (this.state.data){
+            return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
             {/*<CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>*/}
             <Button style={{backgroundColor: this.state.editable ? 'red' : 'green'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
             <Button style={{backgroundColor: 'green', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const setStats = require('../models/setStats.js');
+const getYearly = require('../models/getYearly.js');
 const getWeekly = require('../models/getWeekly.js');
 const getMonthly = require('../models/getMonthly.js');
+const insertYearly = require('../models/insertYearly.js');
 const insertMonthly = require('../models/insertMonthly.js');
 const insertWeekly = require('../models/insertWeekly.js');
 const insertDaily = require('../models/insertDaily.js');
@@ -10,6 +12,7 @@ const getDaily = require('../models/getDaily.js');
 const validateCreds = require('../models/validateCreds.js');
 const register = require('../models/register.js');
 const path = require('path');
+const moment =  require('moment');
 
 //login
 router.post('/api/login', (req, res) => {
@@ -64,13 +67,43 @@ router.post('/api/register', (req, res) => {
         if(result == 'Registered'){
             req.session.username = req.body.username;
             req.session.save;
-            res.json('Registered')
+            insertYearly(moment().format('YYYY'), req.session.username, function(result){
+                console.log(result);
+                res.json('Registered')
+            })
         }
         else{
             res.json('Error')
         }
     })
 });
+
+//get yearly stats
+router.get('/api/getStats/Yearly', (req, res) => {
+    console.log(req.query)
+
+    if(req.session.username){
+
+        getYearly(req.query.year, req.session.username, function(result){
+            console.log(result)
+            
+            if(result == 'Empty'){
+
+                insertYearly(req.query.year, req.session.username, function(result){
+                    console.log(result)
+                    res.json('Inserted!')
+                })
+            }
+            else{
+                res.json(result)
+            }
+        })
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
 
 //get daily stats
 router.get('/api/getStats/Daily', (req, res) => {

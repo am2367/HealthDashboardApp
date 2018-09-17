@@ -35,7 +35,8 @@ const styles = theme => ({
 class MonthlyCard extends React.Component {
 
     state={open: false, 
-           index: this.props.index}
+           index: this.props.index,
+           data: this.props.data}
 
     open = () => {
       this.setState({open: true}, () => this.props.setOpen(this.state.index))
@@ -43,6 +44,20 @@ class MonthlyCard extends React.Component {
 
     close = () => {
       this.setState({open: false}, () => this.props.setClose())
+    }
+
+    componentWillReceiveProps = (nextProps) => {
+      //console.log(nextProps.data)
+      this.setState({data: nextProps.data})
+    }
+
+    isTodayCard = () =>{
+      if(moment(this.state.data['Date']).format('YYYY-MM-DD') == moment().format('YYYY-MM-DD')){
+          return true
+      }
+      else{
+          return false
+      }
     }
 
     render() {
@@ -55,8 +70,8 @@ class MonthlyCard extends React.Component {
         let dayCount = new Date(month, year, 0).getDate();
         let days = []
         return(
-            <Card onClick={() => { this.open() }} style={{cursor: 'pointer',backgroundColor: (dayNumber == this.state.index+1) ? '#14e4ff' : ''}} className={classes.Card}>
-                <CardHeader title={this.state.index + 1}/>
+            <Card onClick={() => { this.open() }} style={{cursor: 'pointer',backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
+                <CardHeader title={moment(this.props.data['Date']).format('D')}/>
             </Card>)
     }
 }
