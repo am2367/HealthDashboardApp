@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 const register = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
@@ -19,21 +21,21 @@ const register = (req, callback) => {
             var dbo = db.db("myapp")
         }
 
-        let user = {username: req.username, 
-                    password: req.password, 
-                    lastName: req.lastName, 
-                    firstName: req.firstName, 
-                    email: req.email}
+        bcrypt.hash(req.password, 10, function(err, hash) {
+            let user = {username: req.username, 
+                password: hash, 
+                lastName: req.lastName, 
+                firstName: req.firstName, 
+                email: req.email}
 
-        dbo.collection("Users").insertOne(user, function(err, res) {
-            if (err) throw err;
-            console.log("Inserted");
+            dbo.collection("Users").insertOne(user, function(err, res) {
+                if (err) throw err;
+                console.log("Inserted");
+            });
             db.close();
-        });
 
-        callback('Registered')
-
-        db.close();
+            callback('Registered')
+        });        
     })
 }
 

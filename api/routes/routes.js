@@ -68,7 +68,7 @@ router.post('/api/register', (req, res) => {
             req.session.username = req.body.username;
             req.session.save;
             insertYearly(moment().format('YYYY'), req.session.username, function(result){
-                console.log(result);
+                //console.log(result);
                 res.json('Registered')
             })
         }
@@ -85,12 +85,12 @@ router.get('/api/getStats/Yearly', (req, res) => {
     if(req.session.username){
 
         getYearly(req.query.year, req.session.username, function(result){
-            console.log(result)
+            //console.log(result)
             
             if(result == 'Empty'){
 
                 insertYearly(req.query.year, req.session.username, function(result){
-                    console.log(result)
+                    //console.log(result)
                     res.json('Inserted!')
                 })
             }
@@ -164,7 +164,7 @@ router.post('/api/setStats', (req, res) => {
     if(req.session.username){
 
         setStats(req.body, req.session.username, function(result){
-            console.log(result)
+            //console.log(result)
 
             res.json(result)
         })

@@ -1,4 +1,5 @@
 var session = require('express-session')
+const bcrypt = require('bcrypt');
 
 const validateCreds = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
@@ -11,7 +12,7 @@ const validateCreds = (req, callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
-        var query = {username: req.username, password: req.password}
+        var query = {username: req.username}
 
         if (err) throw err;
         console.log("Database Connected!");
@@ -27,16 +28,24 @@ const validateCreds = (req, callback) => {
             if (err) throw err;
             
             if(result.length){
-                console.log(result)
-                callback('Correct');
+                bcrypt.compare(req.password, result[0].password, function(err, res) {
+                    if(res) {
+                        callback('Correct');
+                    } else {
+                        callback('Incorrect');
+                    } 
+                }); 
             }
             else{
-                console.log(result)
                 callback('Incorrect');
             }    
         
             db.close();
         });
+
+        
+
+        
     });
 }
 
