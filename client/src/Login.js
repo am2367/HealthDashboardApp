@@ -41,11 +41,6 @@ const styles = theme => ({
     inputLabelFocused: {
       color: 'blue',
     },
-    inputInkbar: {
-      '&:after': {
-        backgroundColor: 'blue',
-      },
-    },
     textFieldRoot: {
       padding: 0,
       'label + &': {
@@ -67,6 +62,9 @@ const styles = theme => ({
     },
     textFieldFormLabel: {
       fontSize: 18,
+    },
+    adornment: {
+      paddingRight: 0
     }
   });
 
@@ -137,20 +135,20 @@ class Login extends React.Component {
       }
     
       validation = () => {
-        let missingFields = false;
+        let error = false;
         this.setState({passwordError: false, usernameError: false})
     
         if(this.state.username === ''){
-          missingFields = true;
+          error = true;
           this.setState({usernameError: true})
         }
     
         if(this.state.password === ''){
-          missingFields = true;
+          error = true;
           this.setState({passwordError: true})
         }
     
-        if(missingFields){
+        if(error){
           return false;
         }
     
@@ -167,37 +165,38 @@ class Login extends React.Component {
                 <Card style={{width: '25%', margin: 'auto'}}>
                     <CardHeader title="Login"/>
                     <form style={{marginLeft: 10, marginBottom: 10, marginRight: 10}}className="form" onSubmit={this.handleLogin}>
-                        <FormControl className={classes.formControl} error={this.state.usernameError}>
-                            <InputLabel FormControlClasses={{focused: classes.inputLabelFocused}} htmlFor="custom-color-input">
-                            User Name
-                            </InputLabel>
-                            <Input 
-                                classes={{inkbar: classes.inputInkbar}} 
-                                id="user" 
-                                value={this.state.username}
-                                onChange={this.handleChange('username')}
-                                />
-                        </FormControl>
 
-                        <FormControl className={classes.formControl} error={this.state.passwordError}>
-                            <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input
-                                id="loginPassword"
-                                type={this.state.showPassword ? 'text' : 'password'}
-                                value={this.state.password}
-                                onChange={this.handleChange('password')}
-                                endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
+                      <TextField
+                        style={{width: '75%'}}
+                          error={this.state.usernameError ? true : false}
+                          label="Username"
+                          id="user" 
+                          value={this.state.username}
+                          onChange={this.handleChange('username')}
+                          variant="outlined"
+                          />
+
+                      <TextField
+                          style={{width: '75%', marginTop: '2%'}}
+                          error={this.state.passwordError ? true : false}
+                          label="Password"
+                          id="loginPassword"
+                          type={this.state.showPassword ? 'text' : 'password'}
+                          value={this.state.password}
+                          onChange={this.handleChange('password')}
+                          variant="outlined"
+                          InputProps={{
+                            endAdornment:
+                              <InputAdornment position="end" variant="standard">
+                                  <IconButton
                                     onClick={this.handleClickShowPasssword}
                                     onMouseDown={this.handleMouseDownPassword}
-                                    >
+                                  >
                                     {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                                }
-                            />
-                        </FormControl>
+                                  </IconButton>
+                              </InputAdornment>
+                          }}
+                      />
                         <FormControl className={classes.formControl}>
                             <div style={{textAlign: "center"}}>
                                 <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>

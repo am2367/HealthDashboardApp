@@ -13,7 +13,7 @@ const setStats = (req, username, callback) => {
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        console.log("Database created!");
+        console.log("Database Connected!");
 
         if(process.env.mLabUser){
             var dbo = db.db("mydb");
@@ -22,9 +22,9 @@ const setStats = (req, username, callback) => {
             var dbo = db.db("myapp")
         }
 
-        let year = moment(req.year).format('YYYY');
-        let month = moment(req.year).format('M') * 1;
-        let day = moment(req.year).format('D') * 1;
+        let year = moment(req.Date).format('YYYY');
+        let month = moment(req.Date).format('M') * 1;
+        let day = moment(req.Date).format('D') * 1;
 
         var myquery = {[year + '.' + month + '.' + day]: Object, Username: username};
 
@@ -33,6 +33,8 @@ const setStats = (req, username, callback) => {
         dbo.collection("Entries").updateOne(myquery, newvalues, function(err, result) {
             if (err) throw err;
             callback('Saved!')
+            db.close();
+            return;
         });
 
         db.close();

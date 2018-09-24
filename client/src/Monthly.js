@@ -63,10 +63,8 @@ class Monthly extends React.Component {
         let newMonth = moment(tempMonth).add(1, 'M').format('YYYY-MM-DD');
         this.setState({month: newMonth})    
       }
-      else{
-        this.props.getMoreData(moment(tempMonth).add(1, "M").format('YYYY'), function() {
-          thisRef.next();
-        })
+      if(!this.state.data[moment(tempMonth).add(3, 'M').format('YYYY')]){
+        this.props.getMoreData(moment(tempMonth).add(3, "M").format('YYYY'));
       }
     }
   
@@ -77,10 +75,8 @@ class Monthly extends React.Component {
         let newMonth = moment(tempMonth).subtract(1, 'M').format('YYYY-MM-DD');
         this.setState({month: newMonth})    
       }
-      else{
-        this.props.getMoreData(moment(tempMonth).subtract(1, "M").format('YYYY'), function(){
-          thisRef.previous();
-        })
+      if(!this.state.data[moment(tempMonth).subtract(3, 'M').format('YYYY')]){
+        this.props.getMoreData(moment(tempMonth).subtract(3, "M").format('YYYY'));
       }
     }
 

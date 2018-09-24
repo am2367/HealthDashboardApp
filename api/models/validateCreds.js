@@ -12,7 +12,7 @@ const validateCreds = (req, callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
-        var query = {username: req.username}
+        var query = {Username: req.username}
 
         if (err) throw err;
         console.log("Database Connected!");
@@ -26,15 +26,15 @@ const validateCreds = (req, callback) => {
 
         dbo.collection("Users").find(query).toArray(function myFunc(err, result) {
             if (err) throw err;
-            
+
             if(result.length){
-                bcrypt.compare(req.password, result[0].password, function(err, res) {
+                bcrypt.compare(req.password, result[0].Password, function(err, res) {
                     if(res) {
                         callback('Correct');
                     } else {
                         callback('Incorrect');
                     } 
-                }); 
+                });
             }
             else{
                 callback('Incorrect');

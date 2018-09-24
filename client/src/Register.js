@@ -42,11 +42,6 @@ const styles = theme => ({
     inputLabelFocused: {
       color: 'blue',
     },
-    inputInkbar: {
-      '&:after': {
-        backgroundColor: 'blue',
-      },
-    },
     textFieldRoot: {
       padding: 0,
       'label + &': {
@@ -127,6 +122,12 @@ class Register extends React.Component {
                 alert("Registered!");
                 this.props.history.push('/Login')
             }
+            else if(data === "Username Taken"){
+                alert("Username Taken")
+            }
+            else if(data === "Email Taken"){
+                alert("Email Taken")
+            }
             else {
                 alert("Error!");
             }
@@ -135,31 +136,36 @@ class Register extends React.Component {
 
     validation = () => {
         let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-        this.setState({first_nameError: false, last_nameError: false, emailError: false, passwordError: false, usernameError: false, confirmPasswordError: false})
-        
+        let error = false;
+        this.setState({first_nameError: false, last_nameError: false, emailError: false, passwordError: false, usernameError: false, confirmPasswordError: false})        
         if(this.state.firstName === ''){
             this.setState({first_nameError: true})
+            error = true;
         }
 
         if(this.state.lastName === ''){
             this.setState({last_nameError: true})
+            error = true;
         }
 
         if(this.state.username === ''){
             this.setState({usernameError: true})
+            error = true;
         }
         
         if(!this.isOkPass(this.state.password)){
             this.setState({passwordError: true})
+            error = true;
         }
 
         if(this.state.password != this.state.confirmPassword){
             this.setState({confirmPasswordError: true})
+            error = true;
         }
 
         if(this.state.email === '' || !re.test(String(this.state.email).toLowerCase())){
             this.setState({emailError: true})
+            error = true;
         }
 
         var data = {firstName: this.state.firstName,
@@ -167,13 +173,7 @@ class Register extends React.Component {
                     email: this.state.email,
                     username: this.state.username,
                     password: this.state.password};
-        
-        if(this.state.first_nameError || 
-           this.state.last_nameError || 
-           this.state.usernameError || 
-           this.state.passwordError || 
-           this.state.emailError || 
-           this.state.confirmPasswordError){
+        if(error){
             return false
         }
 
@@ -202,90 +202,94 @@ class Register extends React.Component {
                 <Card style={{width: '25%', margin: 'auto'}}>
                     <CardHeader title="Register"/>
                     <form style={{marginLeft: 10, marginBottom: 10, marginRight: 10}} id="form" className="form" onSubmit={this.handleRegister}>
-                        <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.first_nameError}>
-                            <InputLabel  htmlFor="first_name">
-                            First Name
-                            </InputLabel>
-                            <Input classes={{inkbar: classes.inputInkbar}} id="first_name" 
-                                value={this.state.firstName}
-                                onChange={this.handleChange('firstName')}
-                            />
-                        </FormControl>
+                        
+                        <TextField
+                            style={{width: '42.5%', marginTop: '2%'}}
+                            label="First Name"
+                            id="first_name" 
+                            value={this.state.first_name}
+                            onChange={this.handleChange('firstName')}
+                            variant="outlined"
+                            error={this.state.first_nameError ? true : false}
+                        />
 
-                        <FormControl className={classes.formControl} style={{width: '50%'}} error={this.state.last_nameError}>
-                            <InputLabel  htmlFor="custom-color-input">
-                            Last Name
-                            </InputLabel>
-                            <Input classes={{inkbar: classes.inputInkbar}} id="last_name" 
-                                value={this.state.lastName}
-                                onChange={this.handleChange('lastName')}
-                            />
-                        </FormControl>
+                        <TextField
+                            style={{width: '42.5%', marginTop: '2%'}}
+                            label="Last Name"
+                            id="last_name" 
+                            value={this.state.last_name}
+                            onChange={this.handleChange('lastName')}
+                            variant="outlined"
+                            error={this.state.last_nameError ? true : false}
+                        />
 
-                        <FormControl className={classes.formControl} error={this.state.emailError}>
-                            <InputLabel htmlFor="custom-color-input">
-                            Email
-                            </InputLabel>
-                            <Input classes={{inkbar: classes.inputInkbar}} id="email" 
-                                value={this.state.email}
-                                onChange={this.handleChange('email')}
-                            />
-                        </FormControl>
+                        <TextField
+                            style={{width: '85%', marginTop: '2%'}}
+                            label="Email"
+                            id="email" 
+                            value={this.state.email}
+                            onChange={this.handleChange('email')}
+                            variant="outlined"
+                            error={this.state.emailError ? true : false}
+                        />
 
-                        <FormControl className={classes.formControl} error={this.state.usernameError}>
-                            <InputLabel htmlFor="custom-color-input">
-                            Username
-                            </InputLabel>
-                            <Input classes={{inkbar: classes.inputInkbar}} id="username" 
-                                value={this.state.username}
-                                onChange={this.handleChange('username')}
-                            />
-                        </FormControl>
+                        <TextField
+                            style={{width: '85%', marginTop: '2%'}}
+                            label="Username"
+                            id="username" 
+                            value={this.state.username}
+                            onChange={this.handleChange('username')}
+                            variant="outlined"
+                            error={this.state.usernameError ? true : false}
+                        />
 
-                        <FormControl className={classes.formControl} error={this.state.passwordError}>
-                            <InputLabel htmlFor="registerPassword">
-                            Password
-                            </InputLabel>
-                            <Input
+                        <TextField
+                            style={{width: '85%', marginTop: '2%'}}
                             id="registerPassword"
+                            label="Password"
+                            error={this.state.passwordError ? true : false}
                             type={this.state.showPassword ? 'text' : 'password'}
                             value={this.state.password}
                             onChange={this.handleChange('password')}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                <IconButton
-                                    onClick={this.handleClickShowPasssword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                                <Tooltip
-                                id="tooltip-controlled"
-                                title="Password needs to be at least 8 characters long and must contain an upper case, lower case, number, and special character."
-                                onClose={this.handleTooltipClose}
-                                enterDelay={200}
-                                leaveDelay={200}
-                                onOpen={this.handleTooltipOpen}
-                                open={this.state.tooltipOpen}
-                                placement="top"
-                                >
-                                <IconButton aria-label="Delete">
-                                    <Info />
-                                </IconButton>
-                                </Tooltip>
-                                </InputAdornment>
-                            }
-                            />
+                            variant="outlined"
+                            InputProps={{
+                                endAdornment:
+                                    <InputAdornment position="end">
+                                    <IconButton
+                                        onClick={this.handleClickShowPasssword}
+                                        onMouseDown={this.handleMouseDownPassword}
+                                    >
+                                        {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                    <Tooltip
+                                    id="tooltip-controlled"
+                                    title="Password needs to be at least 8 characters long and must contain an upper case, lower case, number, and special character."
+                                    onClose={this.handleTooltipClose}
+                                    enterDelay={200}
+                                    leaveDelay={200}
+                                    onOpen={this.handleTooltipOpen}
+                                    open={this.state.tooltipOpen}
+                                    placement="top"
+                                    >
+                                    <IconButton aria-label="Delete">
+                                        <Info />
+                                    </IconButton>
+                                    </Tooltip>
+                                    </InputAdornment>
+                            }}
+                        />
 
-                        </FormControl>
-                        <FormControl className={classes.formControl} error={this.state.confirmPasswordError}>
-                            <InputLabel htmlFor="confirm password">Confirm Password</InputLabel>
-                            <Input
+                        <TextField
+                            style={{width: '85%', marginTop: '2%'}}
                             id="confirmPassword"
+                            label="Confirm Password"
+                            error={this.state.confirmPasswordError ? true : false}
                             type={this.state.showPassword ? 'text' : 'password'}
                             value={this.state.confirmPassword}
                             onChange={this.handleChange('confirmPassword')}
-                            endAdornment={
+                            variant="outlined"
+                            InputProps={{
+                                endAdornment:
                                 <InputAdornment position="end">
                                 <IconButton
                                     onClick={this.handleClickShowPasssword}
@@ -294,10 +298,9 @@ class Register extends React.Component {
                                     {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
                                 </IconButton>
                                 </InputAdornment>
-                            }
-                            />
+                            }}
+                        />
 
-                        </FormControl>
                         <FormControl className={classes.formControl}>
                             <div style={{textAlign: "center"}}>
                                 <Button id="register" className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>

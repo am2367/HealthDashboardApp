@@ -1,6 +1,6 @@
-const moment =  require('moment');
+const excel = require('node-excel-export');
 
-const getYearly = (year, username,callback) => {
+const exportData = (req, username) => {
     var MongoClient = require('mongodb').MongoClient;
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
@@ -11,11 +11,7 @@ const getYearly = (year, username,callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
-        var query = {$and:
-                        [{[year]: {$exists : true}}, 
-                         {Username: username}
-                        ]};
-        
+
         if (err) throw err;
         console.log("Database Connected!");
         
@@ -26,21 +22,29 @@ const getYearly = (year, username,callback) => {
             var dbo = db.db("myapp")
         }
 
-        dbo.collection("Entries").find(query).toArray(function myFunc(err, result) {
+        let query = {Username: username}
+
+        dbo.collection("Entries").find(query, {Array: {Object: {Object: 1} } }).toArray(function myFunc(err, result) {
             if (err) throw err;
             if(result.length){
-                callback(result[0]);
                 db.close();
-                return;
+                console.log(result)
+                generateExport(result);
             }
             else{
-                callback('Empty')
                 db.close();
-                return;
+                return "Empty";
             }
-            db.close();
         });
     });
+
+    function generateExport(data){
+        //Array of objects representing heading rows (very top)
+        const heading = [
+            [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, {value: 'c1', style: styles.headerDark}],
+            ['a2', 'b2', 'c2'] // <-- It can be only values
+        ];
+    }
 }
 
-module.exports = getYearly;
+module.exports = exportData;

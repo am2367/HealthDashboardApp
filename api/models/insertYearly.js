@@ -31,24 +31,28 @@ const insertYearly = (year, username, callback) => {
                 let monthVal = month + 1
                 let date = year + "-" + monthVal + "-" + day
 
+                let presetData = {  Time: 0, 
+                                    TimeExpected: 0,
+                                    Distance: 0,
+                                    DistanceExpected: 0,
+                                    Intensity: 0,
+                                    IntensityExpected: 0, 
+                                    Cals: 0,
+                                    CalsExpected: 0 }
+
                 dbo.collection("Entries").update({$and: [{[year]: {$exists : true}},
                                                          {Username: username}]},
                                                          {$set:
                                                             {[year + '.' + monthVal + '.' + day]: 
-                                                                {Date: date,
-                                                                    Run: 
-                                                                    { Time: 0, Distance: 0, Cals: 0 },
-                                                                 Swim: 
-                                                                    { Time: 0, Distance: 0, Cals: 0 },
-                                                                 Bike: 
-                                                                    { Time: 0, Distance: 0, Cals: 0 },
-                                                                 Workout: 
-                                                                    { Time: 0, Distance: 0, Cals: 0 }}
-                }},{upsert: true})            
+                                                                {   Date: date,
+                                                                    Run: presetData,
+                                                                    Swim: presetData,
+                                                                    Bike: presetData,
+                                                                    Workout: presetData}}},
+                                                                {upsert: true})            
             }
         }
         callback('Inserted!')
-
         db.close();
     })
 }

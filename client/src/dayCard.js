@@ -32,7 +32,6 @@ const styles = theme => ({
     },
     Card: {
       padding: theme.spacing.unit * 2,
-      textAlign: 'center',
       color: theme.palette.text.secondary,
     },
     viewButtons: {
@@ -97,8 +96,7 @@ class DayCard extends React.Component {
     }
 
     save = () => {
-
-
+        
         fetch('/api/setStats', {
             method: 'post',
             headers: {
@@ -122,38 +120,91 @@ class DayCard extends React.Component {
     render() {
         const { classes } = this.props;
         //console.log(this.state.data)
-        const field = (id, item) => (
+        const field = (id, item, expected) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center'}}>
                 <TextField
                 id={id}
-                label="Number"
-                type="number"
+                label="Actual"
                 fullWidth={true}
-                label=''
+                type="number"
                 value={this.state.data[id][item]}
                 onChange={(e) => this.handleChange(id, item, e)}
-                style={{width: '50px'}}
+                style={{width: '70px'}}
+                variant="outlined"
+                InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+                <TextField
+                id={id}
+                label="Expected"
+                fullWidth={true}
+                type="number"
+                value={this.state.data[id][expected]}
+                onChange={(e) => this.handleChange(id, expected, e)}
+                style={{width: '70px'}}
+                variant="outlined"
+                InputLabelProps={{
+                    shrink: true,
+                  }}
                 />
             </TableCell>
         )
-        const dataCell = (id, item) => (
+        const dataCell = (id, item, expected) => (
             <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center'}}>
-                {this.state.data[id][item]}
+                {this.state.data[id][item]} | {this.state.data[id][expected]}
             </TableCell>
         )
         if (this.state.data){
             return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
             {/*<CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>*/}
-            <Button style={{backgroundColor: this.state.editable ? '#ff0000b3' : '#008000b3'}}  onClick={() => { this.edit() }}>{this.state.editable ? 'Cancel' : 'Edit'}</Button>
-            <Button style={{backgroundColor: '#008000b3', display: this.state.editable ? '' : 'none'}}  onClick={() => { this.save() }}>Save</Button>
-            <CardContent>
+            <Grid container style={{margin: 'auto', display: 'flex', paddingLeft: '24px', paddingRight: '24px'}}>
+                <Grid item sm={4} md={4} lg={4} style={{textAlign: 'start'}}>
+                    <Typography variant="caption"> Actual | Expected </Typography>
+                </Grid>
+                <Grid item sm={8} md={8} lg={8} 
+                      style={{display: 'flex', alignItems: 'flex-end', flexDirection: 'row-reverse'}}>
+                    <Button 
+                        style={{backgroundColor: this.state.editable ? '#ff0000b3' : '#008000b3'}}  
+                        onClick={() => { this.edit() }}>
+                        {this.state.editable ? 'Cancel' : 'Edit'}
+                    </Button>
+                    <Button 
+                        style={{backgroundColor: '#008000b3', display: this.state.editable ? '' : 'none'}} 
+                        onClick={() => { this.save() }}>
+                        Save
+                    </Button>
+                </Grid>
+            </Grid>
+            <CardContent style={{overflowX: 'auto'}}>
                 <Table>
                     <TableHead>
                     <TableRow>
-                        <TableCell numeric style={{paddingRight: 0, textAlign: 'left'}}>Activity</TableCell>
-                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Time</TableCell>
-                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>Distance</TableCell>
-                        <TableCell numeric style={{paddingRight: 0, textAlign: 'center'}}>kCals</TableCell>
+                        <TableCell 
+                            numeric 
+                            style={{paddingRight: 0, textAlign: 'left', width: '50px'}}>
+                            Activity
+                        </TableCell>
+                        <TableCell 
+                            numeric 
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px'}}>
+                            Time(H)
+                        </TableCell>
+                        <TableCell 
+                            numeric 
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            Distance(M)
+                        </TableCell>
+                        <TableCell 
+                            numeric 
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            Intensity(%)
+                        </TableCell>
+                        <TableCell 
+                            numeric 
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            kCals
+                        </TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody key="Run">
@@ -161,12 +212,14 @@ class DayCard extends React.Component {
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
                                 <Icon><RunIcon/></Icon>
                             </TableCell>
-                            {dataCell('Run', 'Time')}
-                            {dataCell('Run', 'Distance')}
-                            {dataCell('Run', 'Cals')}
-                            {field('Run', 'Time')}
-                            {field('Run', 'Distance')}
-                            {field('Run', 'Cals')}
+                            {dataCell('Run', 'Time', 'TimeExpected')}
+                            {dataCell('Run', 'Distance','DistanceExpected')}
+                            {dataCell('Run', 'Intensity', 'IntensityExpected')}
+                            {dataCell('Run', 'Cals', 'CalsExpected')}
+                            {field('Run', 'Time', 'TimeExpected')}
+                            {field('Run', 'Distance', 'DistanceExpected')}
+                            {field('Run', 'Intensity', 'IntensityExpected')}
+                            {field('Run', 'Cals', 'CalsExpected')}
                         </TableRow>
                     </TableBody>
                     <TableBody key="Swim">
@@ -174,12 +227,14 @@ class DayCard extends React.Component {
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
                                 <Icon><SwimIcon/></Icon>
                             </TableCell>
-                            {dataCell('Swim', 'Time')}
-                            {dataCell('Swim', 'Distance')}
-                            {dataCell('Swim', 'Cals')}
-                            {field('Swim', 'Time')}
-                            {field('Swim', 'Distance')}
-                            {field('Swim', 'Cals')}
+                            {dataCell('Swim', 'Time', 'TimeExpected')}
+                            {dataCell('Swim', 'Distance', 'DistanceExpected')}
+                            {dataCell('Swim', 'Intensity', 'IntensityExpected')}
+                            {dataCell('Swim', 'Cals', 'CalsExpected')}
+                            {field('Swim', 'Time', 'TimeExpected')}
+                            {field('Swim', 'Distance', 'DistanceExpected')}
+                            {field('Swim', 'Intensity', 'IntensityExpected')}
+                            {field('Swim', 'Cals', 'CalsExpected')}
                         </TableRow>
                     </TableBody>
                     <TableBody key="Bike">
@@ -187,12 +242,14 @@ class DayCard extends React.Component {
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
                                 <Icon><BikeIcon/></Icon>
                             </TableCell>
-                            {dataCell('Bike', 'Time')}
-                            {dataCell('Bike', 'Distance')}
-                            {dataCell('Bike', 'Cals')}
-                            {field('Bike', 'Time')}
-                            {field('Bike', 'Distance')}
-                            {field('Bike', 'Cals')}
+                            {dataCell('Bike', 'Time', 'TimeExpected')}
+                            {dataCell('Bike', 'Distance', 'DistanceExpected')}
+                            {dataCell('Bike', 'Intensity', 'IntensityExpected')}
+                            {dataCell('Bike', 'Cals', 'CalsExpected')}
+                            {field('Bike', 'Time', 'TimeExpected')}
+                            {field('Bike', 'Distance', 'DistanceExpected')}
+                            {field('Bike', 'Intensity', 'IntensityExpected')}
+                            {field('Bike', 'Cals', 'CalsExpected')}
                         </TableRow>
                     </TableBody>
                     <TableBody key="Workout">
@@ -200,12 +257,14 @@ class DayCard extends React.Component {
                             <TableCell component="th" scope="row" style={{paddingRight: 0}}>
                                 <Icon><WorkoutIcon/></Icon>
                             </TableCell>
-                            {dataCell('Workout', 'Time')}
-                            {dataCell('Workout', 'Distance')}
-                            {dataCell('Workout', 'Cals')}
-                            {field('Workout', 'Time')}
-                            {field('Workout', 'Distance')}
-                            {field('Workout', 'Cals')}
+                            {dataCell('Workout', 'Time', 'TimeExpected')}
+                            {dataCell('Workout', 'Distance', 'DistanceExpected')}
+                            {dataCell('Workout', 'Intensity', 'IntensityExpected')}
+                            {dataCell('Workout', 'Cals', 'CalsExpected')}
+                            {field('Workout', 'Time', 'TimeExpected')}
+                            {field('Workout', 'Distance', 'DistanceExpected')}
+                            {field('Workout', 'Intensity', 'IntensityExpected')}
+                            {field('Workout', 'Cals', 'CalsExpected')}
                         </TableRow>
                     </TableBody>
                 </Table>   

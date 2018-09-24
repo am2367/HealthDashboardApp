@@ -13,12 +13,13 @@ const validateCreds = require('../models/validateCreds.js');
 const register = require('../models/register.js');
 const path = require('path');
 const moment =  require('moment');
+const exportData = require('../models/exportData.js');
 
 //login
 router.post('/api/login', (req, res) => {
     //console.log(req.body)
     validateCreds(req.body, function(result){
-        //console.log(result)
+        console.log(result)
         if(result == 'Correct'){
             req.session.username = req.body.username;
             req.session.save;
@@ -64,13 +65,19 @@ router.post('/api/register', (req, res) => {
     console.log(req.body)
     register(req.body, function(result){
         //console.log(result)
-        if(result == 'Registered'){
+        if(result === 'Registered'){
             req.session.username = req.body.username;
             req.session.save;
             insertYearly(moment().format('YYYY'), req.session.username, function(result){
                 //console.log(result);
                 res.json('Registered')
             })
+        }
+        else if(result === "Username Taken"){
+            res.json("Username Taken");
+        }
+        else if(result === "Email Taken"){
+            res.json("Email Taken");
         }
         else{
             res.json('Error')
@@ -197,6 +204,15 @@ router.get('/api/getStats/Monthly', (req, res) => {
     }
     else{
         res.redirect('/login');
+    }
+});
+
+router.get('/api/export', (req, res) => {
+    console.log(req.query)
+
+    if(req.session.username){
+        data = exportData(req.query, req.session.username)
+        res.json(data)
     }
 });
 

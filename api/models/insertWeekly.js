@@ -47,7 +47,6 @@ const insertWeekly = (req, username, callback) => {
             
         }
         callback('Inserted!')
-
         db.close();
     })
 }

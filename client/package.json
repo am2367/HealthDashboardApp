@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "proxy": "http://localhost:4200",
   "dependencies": {
-    "@material-ui/core": "^1.4.3",
+    "@babel/runtime": "7.0.0-beta.55",
+    "@material-ui/core": "^3.1.1",
     "@material-ui/icons": "^2.0.3",
     "moment": "^2.22.2",
     "mysql": "^2.16.0",

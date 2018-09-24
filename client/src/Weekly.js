@@ -55,10 +55,8 @@ class Weekly extends React.Component {
           let newWeek = moment(tempWeek).add(1, 'w').format('YYYY-MM-DD');
           this.setState({week: newWeek})    
         }
-        else{
-          this.props.getMoreData(moment(tempWeek).add(1, "w").format('YYYY'), function() {
-            thisRef.next();
-          })
+        if(!this.state.data[moment(tempWeek).add(3, 'w').format('YYYY')]){
+            this.props.getMoreData(moment(tempWeek).add(3, "w").format('YYYY'));
         }
     }
     
@@ -69,10 +67,8 @@ class Weekly extends React.Component {
             let newWeek = moment(tempWeek).subtract(1, 'w').format('YYYY-MM-DD');
             this.setState({week: newWeek})    
         }
-        else{
-            this.props.getMoreData(moment(tempWeek).subtract(1, "w").format('YYYY'), function(){
-                thisRef.previous();
-            })
+        if(!this.state.data[moment(tempWeek).subtract(3, 'w').format('YYYY')]){
+            this.props.getMoreData(moment(tempWeek).subtract(3, "w").format('YYYY'));
         }
     }
     

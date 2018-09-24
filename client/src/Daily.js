@@ -106,10 +106,8 @@ class Daily extends React.Component {
             let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
             this.setState({date: newDate})    
         }
-        else{
-            this.props.getMoreData(moment(tempDate).subtract(1, "d").format('YYYY'), function(){
-                thisRef.previous();
-            })
+        if(!this.state.data[moment(tempDate).add(3, 'd').format('YYYY')]){
+            this.props.getMoreData(moment(tempDate).add(3, "d").format('YYYY'));
         }
     }
 
