@@ -46,6 +46,7 @@ class MenuAppBar extends React.Component {
       this.setState({username: nextProps.username})
   }
 
+  //Log user out
   logout = () => {
     fetch('/api/logout')
         .then(this.handleErrors)
@@ -56,6 +57,16 @@ class MenuAppBar extends React.Component {
                 alert("Logged Out!")
                 this.props.redirect()
             }
+    })
+  }
+
+  //Export Data
+  export = () => {
+    fetch('/api/export')
+        .then(this.handleErrors)
+        .then(response => response.json())
+        .then(data=>{
+            //console.log(data)
     })
   }
 
@@ -101,6 +112,7 @@ class MenuAppBar extends React.Component {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={this.export}>Export</MenuItem>
                   <MenuItem onClick={this.logout}>Logout</MenuItem>
                 </Menu>
               </div>

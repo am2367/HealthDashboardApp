@@ -2,11 +2,13 @@ const moment =  require('moment');
 
 const getYearly = (year, username,callback) => {
     var MongoClient = require('mongodb').MongoClient;
+    //Connection details for mLab if environmental variables exist (deployed from cloud)
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
         let dbPassword = process.env.mLabPassword;
         var url = "mongodb://" + dbUsername + ':' + dbPassword + "@ds119052.mlab.com:19052/mydb";
     }
+    //Local mongodb url
     else{
         var url = "mongodb://localhost:27017/myapp";
     }

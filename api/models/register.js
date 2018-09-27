@@ -2,11 +2,13 @@ const bcrypt = require('bcrypt');
 
 const register = (req, callback) => {
     var MongoClient = require('mongodb').MongoClient;
+    //Connection details for mLab if environmental variables exist (deployed from cloud)
     if (process.env.mLabUser){
         let dbUsername = process.env.mLabUser;
         let dbPassword = process.env.mLabPassword;
         var url = "mongodb://" + dbUsername + ':' + dbPassword + "@ds119052.mlab.com:19052/mydb";
     }
+    //Local mongodb url
     else{
         var url = "mongodb://localhost:27017/myapp";
     }
@@ -43,7 +45,7 @@ const register = (req, callback) => {
             let user = {Username: req.username, 
                 Password: hash, 
                 LastName: req.lastName, 
-                FirstName: req.firstName, 
+                FirstName: req.firstName,
                 Email: req.email}
 
                 register(user,dbo, db);

@@ -207,12 +207,17 @@ router.get('/api/getStats/Monthly', (req, res) => {
     }
 });
 
+//Export
 router.get('/api/export', (req, res) => {
     console.log(req.query)
 
     if(req.session.username){
-        data = exportData(req.query, req.session.username)
-        res.json(data)
+        exportData(req.query, req.session.username, function(result){
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+            res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+            res.send(result)
+        })
+        
     }
 });
 
