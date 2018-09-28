@@ -12,6 +12,13 @@ app.use(express.static(`${__dirname}/client/build`));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
+var sess_options = {
+  path: require('path').join(require('os').tmpdir(), 'sessions'),  //directory where session files will be stored
+  useAsync: true,
+  reapInterval: 5000,
+  maxAge: 10000
+};
+
 var sess = {
   secret: 'keyboard cat',
   cookie: {maxAge: 300000},
@@ -21,7 +28,7 @@ var sess = {
   genid: function(req){
     return uuidv4();
   },
-  store: new FileStore
+  store: new FileStore(sess_options)
 }
  
 if (app.get('env') === 'production') {
