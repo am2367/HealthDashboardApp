@@ -12,6 +12,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import download from 'downloadjs';
 import { withRouter } from 'react-router'
 
 const styles = {
@@ -64,10 +65,11 @@ class MenuAppBar extends React.Component {
   export = () => {
     fetch('/api/export')
         .then(this.handleErrors)
-        .then(response => response.json())
-        .then(data=>{
-            //console.log(data)
-    })
+        .then(function(resp) {
+          return resp.blob();
+        }).then(function(blob) {
+          download(blob, "report.xls", "application/vnd.ms-excel");
+        });
   }
 
   render() {

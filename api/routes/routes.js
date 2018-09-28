@@ -214,8 +214,8 @@ router.get('/api/export', (req, res) => {
     if(req.session.username){
         exportData(req.query, req.session.username, function(result){
             res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-            res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
-            res.send(result)
+            res.setHeader("Content-Disposition", "attachment; filename=" + "report.xls");
+            res.end(result, 'binary')
         })
         
     }

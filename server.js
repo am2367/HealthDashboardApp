@@ -1,7 +1,8 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 const session = require('express-session');
-var MemcachedStore = require('connect-memcached')(session);
+//var MemcachedStore = require('connect-memcached')(session);
+var FileStore = require('session-file-store')(session);
 const uuidv4 = require('uuid/v4');
 const router = express.Router();
 var cors = require('cors');
@@ -19,7 +20,8 @@ var sess = {
   unset: 'destroy',
   genid: function(req){
     return uuidv4();
-  }
+  },
+  store: new FileStore
 }
  
 if (app.get('env') === 'production') {
@@ -27,11 +29,11 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true // serve secure cookies
 }
 
-if (app.get('env') === 'production' && app.get('MEMCACHE_URL')) {
+/*if (app.get('env') === 'production' && app.get('MEMCACHE_URL')) {
   sessionConfig.store = new MemcachedStore({
     hosts: [app.get('MEMCACHE_URL')]
   });
-}
+}*/
  
 app.use(session(sess))
 

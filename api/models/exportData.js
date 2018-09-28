@@ -76,8 +76,25 @@ const exportData = (req, username, callback) => {
         
         //Array of objects representing heading rows (very top)
         const heading = [
-            [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, {value: 'c1', style: styles.headerDark}],
-            ['a2', 'b2', 'c2'] // <-- It can be only values
+            ['Date', 
+             'Activity', 
+             'Time (Hours)',
+             '',
+             'Distance (Miles)',
+             '',
+             'Intensity (Percent)',
+             '',
+             'Calories (kCals)'],
+             ['', 
+              '',
+              'Actual',
+              'Expected',
+              'Actual',
+              'Expected',
+              'Actual',
+              'Expected',
+              'Actual',
+              'Expected']
         ];
         
         //Here you specify the export structure
@@ -123,9 +140,12 @@ const exportData = (req, username, callback) => {
         // The merges are independent of the data.
         // A merge will overwrite all data _not_ in the top-left cell.
         const merges = [
-            { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-            { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-            { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
+            { start: { row: 1, column: 1 }, end: { row: 2, column: 1 } },
+            { start: { row: 1, column: 2 }, end: { row: 2, column: 2 } },
+            { start: { row: 1, column: 3 }, end: { row: 1, column: 4 } },
+            { start: { row: 1, column: 5 }, end: { row: 1, column: 6 } },
+            { start: { row: 1, column: 7 }, end: { row: 1, column: 8 } },
+            { start: { row: 1, column: 9 }, end: { row: 1, column: 10 } }
         ]
         
         // Create the excel report.
