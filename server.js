@@ -13,7 +13,7 @@ app.use(express.static(`${__dirname}/client/build`));
 app.use(bodyParser.urlencoded({ extended: false }))
 
 var sess_options = {
-  path: require('path').join(require('os').tmpdir(), 'sessions'),  //directory where session files will be stored
+  path: './sessions./',  //directory where session files will be stored
   useAsync: true,
   reapInterval: 5000,
   maxAge: 10000
