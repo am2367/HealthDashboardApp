@@ -1,23 +1,24 @@
 const express = require('express');
 var bodyParser = require('body-parser');
 const session = require('express-session');
-//var MemcachedStore = require('connect-memcached')(session);
-var FileStore = require('session-file-store')(session);
+const MongoStore = require('connect-mongo')(session);
 const uuidv4 = require('uuid/v4');
 const router = express.Router();
 var cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4200;
 app.use(express.static(`${__dirname}/client/build`));
-// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-var sess_options = {
-  path: './sessions./',  //directory where session files will be stored
-  useAsync: true,
-  reapInterval: 5000,
-  maxAge: 10000
-};
+if (process.env.mLabUser){
+  let dbUsername = process.env.mLabUser;
+  let dbPassword = process.env.mLabPassword;
+  var url = "mongodb://" + dbUsername + ':' + dbPassword + "@ds119052.mlab.com:19052/mydb";
+}
+//Local mongodb url
+else{
+  var url = "mongodb://localhost:27017/myapp";
+}
 
 var sess = {
   secret: 'keyboard cat',
@@ -28,7 +29,7 @@ var sess = {
   genid: function(req){
     return uuidv4();
   },
-  store: new FileStore(sess_options)
+  store:new MongoStore({url: url})
 }
  
 if (app.get('env') === 'production') {
