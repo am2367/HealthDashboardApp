@@ -51,11 +51,11 @@ class Weekly extends React.Component {
     next = () => {
         let thisRef = this
         let tempWeek = this.state.week
-        if(this.state.data[moment(tempWeek).add(1, 'w').format('YYYY')]){
+        if(this.state.data['Year'][moment(tempWeek).add(1, 'w').format('YYYY')]){
           let newWeek = moment(tempWeek).add(1, 'w').format('YYYY-MM-DD');
           this.setState({week: newWeek})    
         }
-        if(!this.state.data[moment(tempWeek).add(3, 'w').format('YYYY')]){
+        else{
             this.props.getMoreData(moment(tempWeek).add(3, "w").format('YYYY'));
         }
     }
@@ -63,11 +63,11 @@ class Weekly extends React.Component {
     previous = () => {
         let thisRef = this
         let tempWeek = this.state.week
-        if(this.state.data[moment(tempWeek).subtract(1, 'w').format('YYYY')]){
+        if(this.state.data['Year'][moment(tempWeek).subtract(1, 'w').format('YYYY')]){
             let newWeek = moment(tempWeek).subtract(1, 'w').format('YYYY-MM-DD');
             this.setState({week: newWeek})    
         }
-        if(!this.state.data[moment(tempWeek).subtract(3, 'w').format('YYYY')]){
+        else{
             this.props.getMoreData(moment(tempWeek).subtract(3, "w").format('YYYY'));
         }
     }
@@ -131,7 +131,7 @@ class Weekly extends React.Component {
         let day = moment(this.state.week).add(weekIndex, 'd').format('D') * 1;
         //console.log(month, day)
         //console.log(this.state.data[year][month][day])
-        return(this.state.data[year][month][day])
+        return(this.state.data['Year'][year]['Month'][month]['Day'][day])
       }
 
     daysTop = () => {

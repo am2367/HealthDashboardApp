@@ -59,11 +59,11 @@ class Monthly extends React.Component {
     next = () => {
       let tempMonth = this.state.month
       let thisRef = this
-      if(this.state.data[moment(tempMonth).add(1, 'M').format('YYYY')]){
+      if(this.state.data['Year'][moment(tempMonth).add(3, 'M').format('YYYY')]){
         let newMonth = moment(tempMonth).add(1, 'M').format('YYYY-MM-DD');
         this.setState({month: newMonth})    
       }
-      if(!this.state.data[moment(tempMonth).add(3, 'M').format('YYYY')]){
+      else{
         this.props.getMoreData(moment(tempMonth).add(3, "M").format('YYYY'));
       }
     }
@@ -71,11 +71,11 @@ class Monthly extends React.Component {
     previous = () => {
       let tempMonth = this.state.month
       let thisRef = this
-      if(this.state.data[moment(tempMonth).subtract(1, 'M').format('YYYY')]){
+      if(this.state.data['Year'][moment(tempMonth).subtract(3, 'M').format('YYYY')]){
         let newMonth = moment(tempMonth).subtract(1, 'M').format('YYYY-MM-DD');
         this.setState({month: newMonth})    
       }
-      if(!this.state.data[moment(tempMonth).subtract(3, 'M').format('YYYY')]){
+      else{
         this.props.getMoreData(moment(tempMonth).subtract(3, "M").format('YYYY'));
       }
     }
@@ -87,7 +87,7 @@ class Monthly extends React.Component {
       let day = moment(this.state.month).add(monthIndex, 'd').format('D') * 1;
       //console.log(year, month, day)
       //console.log(this.state.data[year][month][day])
-      return(this.state.data[year][month][day])
+      return(this.state.data['Year'][year]['Month'][month]['Day'][day])
     }
 
     componentWillMount = () => {

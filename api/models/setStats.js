@@ -29,10 +29,10 @@ const setStats = (req, username, callback) => {
         let month = moment(req.Date).format('M') * 1;
         let day = moment(req.Date).format('D') * 1;
 
-        var myquery = {[year + '.' + month + '.' + day]: Object, Username: username};
+        var myquery = {["Year." + year + '.Month.' + month + '.Day.' + day]: Object, Username: username};
 
         //console.log(myquery)
-        var newvalues = { $set: {[year + '.' + month + '.' + day]: {Date: req.Date, Run: req.Run, Swim: req.Swim, Bike: req.Bike, Workout: req.Workout}}};
+        var newvalues = { $set: {["Year." + year + '.Month.' + month + '.Day.' + day]: {Date: req.Date, Run: req.Run, Swim: req.Swim, Bike: req.Bike, Workout: req.Workout}}};
         dbo.collection("Entries").updateOne(myquery, newvalues, function(err, result) {
             if (err) throw err;
             callback('Saved!')

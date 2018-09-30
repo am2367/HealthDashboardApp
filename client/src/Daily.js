@@ -73,41 +73,31 @@ class Daily extends React.Component {
     //console.log(nextProps.data.length)
     }
 
-  next = () => {
-    let tempDate = this.state.date
-    let newDate = moment(tempDate).add(1, 'd').format('YYYY-MM-DD');
-    this.setState({date: newDate})
-  }
-
-  previous = () => {
-    let tempDate = this.state.date
-    let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
-    this.setState({date: newDate})
-  }
-
     next = () => {
         let thisRef = this
         let tempDate = this.state.date
-        if(this.state.data[moment(tempDate).add(1, 'd').format('YYYY')]){
-        let newDate = moment(tempDate).add(1, 'd').format('YYYY-MM-DD');
-        this.setState({date: newDate})    
+        if(this.state.data['Year'][moment(tempDate).add(3, 'd').format('YYYY')]){
+            let newDate = moment(tempDate).add(1, 'd').format('YYYY-MM-DD');
+            this.setState({date: newDate})    
         }
         else{
-        this.props.getMoreData(moment(tempDate).add(1, "d").format('YYYY'), function() {
-            thisRef.next();
-        })
+            this.props.getMoreData(moment(tempDate).add(3, "d").format('YYYY'), function() {
+                thisRef.next();
+            })
         }
     }
 
     previous = () => {
         let thisRef = this
         let tempDate = this.state.date
-        if(this.state.data[moment(tempDate).subtract(1, 'd').format('YYYY')]){
+        if(this.state.data['Year'][moment(tempDate).subtract(3, 'd').format('YYYY')]){
             let newDate = moment(tempDate).subtract(1, 'd').format('YYYY-MM-DD');
             this.setState({date: newDate})    
         }
-        if(!this.state.data[moment(tempDate).add(3, 'd').format('YYYY')]){
-            this.props.getMoreData(moment(tempDate).add(3, "d").format('YYYY'));
+        else{
+            this.props.getMoreData(moment(tempDate).subtract(3, "d").format('YYYY'), function() {
+                thisRef.next();
+            })
         }
     }
 
@@ -121,10 +111,10 @@ class Daily extends React.Component {
     let month = moment(this.state.date).format('M') * 1;
     let day = moment(this.state.date).format('D') * 1;
     //console.log(this.state.data[year][month][day])
-    return(this.state.data[year][month][day])
+    return(this.state.data['Year'][year]['Month'][month]['Day'][day])
   }
 
-  getData = () => {
+  /*getData = () => {
      
     let dateStart = moment().startOf("isoWeek").format() 
     let dateEnd = moment().endOf("isoWeek").format()
@@ -138,7 +128,7 @@ class Daily extends React.Component {
               this.setState({data: data})
           }
       })
-  }
+  }*/
     render() {
          const { classes } = this.props;
 

@@ -13,10 +13,7 @@ const getYearly = (year, username,callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
-        var query = {$and:
-                        [{[year]: {$exists : true}}, 
-                         {Username: username}
-                        ]};
+        var query = {["Year." + year] : {'$exists' : 1}, Username: username};
         
         if (err) throw err;
         console.log("Database Connected!");

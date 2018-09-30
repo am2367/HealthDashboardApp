@@ -23,7 +23,7 @@ const insertYearly = (year, username, callback) => {
             var dbo = db.db("myapp")
         }
 
-        dbo.collection("Entries").insertOne( { [year]: [], Username: username } );
+        //dbo.collection("Entries").insertOne( {'Year' : {[year] : {Month: Object}}, Username: username } );
 
         for(month=0; month<12; month++){
             let daysInMonth = moment().startOf('year').add(month, 'M').daysInMonth();
@@ -42,16 +42,15 @@ const insertYearly = (year, username, callback) => {
                                     Cals: 0,
                                     CalsExpected: 0 }
 
-                dbo.collection("Entries").update({$and: [{[year]: {$exists : true}},
-                                                         {Username: username}]},
-                                                         {$set:
-                                                            {[year + '.' + monthVal + '.' + day]: 
-                                                                {   Date: date,
-                                                                    Run: presetData,
-                                                                    Swim: presetData,
-                                                                    Bike: presetData,
-                                                                    Workout: presetData}}},
-                                                                {upsert: true})            
+                dbo.collection("Entries").update({Username: username},
+                                                    {$set:
+                                                    {['Year.' + year + '.Month.' + monthVal + '.Day.' + day]: 
+                                                        {   Date: date,
+                                                            Run: presetData,
+                                                            Swim: presetData,
+                                                            Bike: presetData,
+                                                            Workout: presetData}}},
+                                                        {upsert: true})            
             }
         }
         callback('Inserted!')
