@@ -14,6 +14,7 @@ const register = require('../models/register.js');
 const path = require('path');
 const moment =  require('moment');
 const exportData = require('../models/exportData.js');
+const checkSession = require('../models/checkSession.js');
 
 //login
 router.post('/api/login', (req, res) => {
@@ -41,7 +42,7 @@ router.get('/api/logout', (req, res) => {
 //check session
 router.get('/api/checkSession', (req, res) => {
     //console.log('Check Session')
-    if(req.session.username){
+    if(checkSession(req)){
         res.json('Active')
     }
     else{
@@ -52,11 +53,8 @@ router.get('/api/checkSession', (req, res) => {
 //get username
 router.get('/api/getUsername', (req, res) => {
     //console.log(req.query)
-    if(req.session.username){
+    if(checkSession(req)){
         res.json(req.session.username)
-    }
-    else{
-        res.json(false)
     }
 });
 
@@ -89,7 +87,7 @@ router.post('/api/register', (req, res) => {
 router.get('/api/getStats/Yearly', (req, res) => {
     console.log(req.query)
 
-    if(req.session.username){
+    if(checkSession(req)){
 
         getYearly(req.query.year, req.session.username, function(result){
             //console.log(result)
@@ -116,7 +114,7 @@ router.get('/api/getStats/Yearly', (req, res) => {
 router.get('/api/getStats/Daily', (req, res) => {
     console.log(req.query)
 
-    if(req.session.username){
+    if(checkSession(req)){
 
         getDaily(req.query, function(result){
             //console.log(result)
@@ -142,7 +140,7 @@ router.get('/api/getStats/Daily', (req, res) => {
 router.get('/api/getStats/Weekly', (req, res) => {
     console.log(req.query)
 
-    if(req.session.username){
+    if(checkSession(req)){
 
         getWeekly(req.query, req.session.username, function(result){
             //console.log(result)
@@ -168,7 +166,7 @@ router.get('/api/getStats/Weekly', (req, res) => {
 router.post('/api/setStats', (req, res) => {
     console.log(req.body)
 
-    if(req.session.username){
+    if(checkSession(req)){
 
         setStats(req.body, req.session.username, function(result){
             //console.log(result)
@@ -185,7 +183,7 @@ router.post('/api/setStats', (req, res) => {
 router.get('/api/getStats/Monthly', (req, res) => {
     console.log(req.query)
 
-    if(req.session.username){
+    if(checkSession(req)){
 
         getMonthly(req.query, req.session.username, function(result){
             //console.log(result)
@@ -211,7 +209,7 @@ router.get('/api/getStats/Monthly', (req, res) => {
 router.get('/api/export', (req, res) => {
     console.log(req.query)
 
-    if(req.session.username){
+    if(checkSession(req)){
         exportData(req.query, req.session.username, function(result){
             res.setHeader('Content-Type', 'application/vnd.openxmlformats');
             res.setHeader("Content-Disposition", "attachment; filename=" + "report.xls");
