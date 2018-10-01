@@ -4,7 +4,7 @@
   "scripts": {
     "start": "npm run server",
     "client": "cd client && npm run start",
-    "server": "nodemon server.js",
+    "server": "nodemon --max-old-space-size=4096 server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "devTest": "set DEBUG=express:* && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1"

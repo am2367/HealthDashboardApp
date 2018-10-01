@@ -17,8 +17,7 @@ import { withRouter } from 'react-router'
 
 const styles = theme => ({
     root: {
-      flexGrow: 1,
-      padding: 10
+      flexGrow: 1
     },
     Card: {
       padding: theme.spacing.unit * 2,
@@ -139,7 +138,7 @@ class Weekly extends React.Component {
         //console.log(startOfWeek)
         let days = []
         for(var i=0; i < 3; i++){
-            days.push(<Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+            days.push(<Grid item xs={10} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                             <h1>{this.getDate(i)}</h1>
                             <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(i, 'd').format("DD") * 1} data={this.getDayData(i)}/>
                         </Grid>);
@@ -151,7 +150,7 @@ class Weekly extends React.Component {
         let startOfWeek = moment().startOf("isoWeek").toDate();
         let days = []
         for(var x=3; x < 7; x++){
-            days.push(<Grid item sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
+            days.push(<Grid item xs={10} sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
                                 <h1>{this.getDate(x)}</h1>
                                 <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(x, 'd').format("DD") * 1} data={this.getDayData(x)}/>
                             </Grid>);
@@ -165,12 +164,12 @@ class Weekly extends React.Component {
         let daysEmpty = [];
 
         for(var i=0; i < 3; i++){
-            daysEmpty.push(<Grid item sm={4} md={4} lg={4}>
+            daysEmpty.push(<Grid item xs={10} sm={4} md={4} lg={4}>
                              <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
                            </Grid>)
         }
         for(var i=3; i < 7; i++){
-            daysEmpty.push(<Grid item sm={3} md={3} lg={3}>
+            daysEmpty.push(<Grid item xs={10} sm={3} md={3} lg={3}>
                              <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
                            </Grid>)
         }
@@ -179,25 +178,29 @@ class Weekly extends React.Component {
         return (isEmpty(this.state.data)
                 ?
             <div className={classes.root}>
-                <Grid container spacing={24}>
+                <Grid container spacing={24} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
                     {daysEmpty}
                 </Grid>
             </div>
             :
             <div className={classes.root}>
-                <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
                     <Grid item sm={2} md={2} lg={2} >
                         <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
                     </Grid>
-                    <Grid item sm={8} md={8} lg={8}>
+                    <Grid item xs={8} sm={8} md={8} lg={8}>
                         {moment(this.state.week).format('MM/DD/YYYY') + ' - ' + moment(this.state.week).endOf("isoWeek").format('MM/DD/YYYY')}
                     </Grid>
-                    <Grid item sm={2} md={2} lg={2} >
+                    <Grid item xs={2} sm={2} md={2} lg={2} >
                         <Right style={{cursor: 'pointer'}} onClick={this.next}/>
                     </Grid>
                 </Grid>
-                <Grid container spacing={24}>{this.daysTop()}</Grid>
-                <Grid container spacing={24}>{this.daysBottom()}</Grid>
+                <Grid container spacing={24} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                    {this.daysTop()}
+                </Grid>
+                <Grid container spacing={24} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                    {this.daysBottom()}
+                </Grid>
             </div>)
     }
 }

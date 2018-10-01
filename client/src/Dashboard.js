@@ -157,14 +157,14 @@ class Dashboard extends React.Component {
       <Router>
         <div className={classes.root}>
           <TopNav redirect={this.redirect} username={this.state.username}/>
-            <Grid container spacing={24}>
-              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+            <Grid container spacing={16}>
+              <Grid item xs={4} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                 <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Daily">Daily</Link></Button>
               </Grid>
-              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+              <Grid item xs={4} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                 <Button onClick={() => {this.viewChange('Weekly')}} style={{backgroundColor: this.state.clicked=='Weekly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Weekly">Weekly</Link></Button>
               </Grid>
-              <Grid item sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
+              <Grid item xs={4} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                 <Button onClick={() => {this.viewChange('Monthly')}} style={{backgroundColor: this.state.clicked=='Monthly' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Monthly">Monthly</Link></Button>
               </Grid>
               <Route path="/Dashboard/Daily" component={this.showDaily} />

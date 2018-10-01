@@ -162,7 +162,8 @@ class Login extends React.Component {
         
         return(
             <div style={{textAlign: 'center'}}>
-                <Card style={{width: '25%', margin: 'auto'}}>
+              <Grid item  xs={10} sm={8} md={4} lg={4} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                <Card>
                     <CardHeader title="Login"/>
                     <form style={{marginLeft: 10, marginBottom: 10, marginRight: 10}}className="form" onSubmit={this.handleLogin}>
 
@@ -199,16 +200,17 @@ class Login extends React.Component {
                       />
                         <FormControl className={classes.formControl}>
                             <div style={{textAlign: "center"}}>
-                                <Button id='login' className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
-                                Login
+                                <Button id='login' className={classes.button} type="submit" style={{width: '33%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
+                                  Login
                                 </Button>
-                                <Button id='register' className={classes.button} onClick={this.register} style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
-                                Register
+                                <Button id='register' className={classes.button} onClick={this.register} style={{width: '33%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                  Register
                                 </Button>
                             </div>
                         </FormControl>
                     </form>
                 </Card>
+              </Grid>
             </div>
         )
     }

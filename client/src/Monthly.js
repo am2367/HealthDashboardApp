@@ -134,13 +134,13 @@ class Monthly extends React.Component {
         if(!isEmpty(this.state.data)){
           for(var i=0; i < dayCount; i++){
             
-            days.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><MonthlyCard setClose={()=>{this.close()}} setOpen={(i)=>{this.open(i)}} index={i} data={this.getDayData(i)}/></Grid>);
+            days.push(<Grid item xs={4} sm={2} md={2} lg={2} style={{textAlign: 'center'}}><MonthlyCard setClose={()=>{this.close()}} setOpen={(i)=>{this.open(i)}} index={i} data={this.getDayData(i)}/></Grid>);
           }
         }
 
         for(var i=0; i < dayCount; i++){
           
-          daysEmpty.push(<Grid item sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '15rem', width: '100%'}}/></Grid>);
+          daysEmpty.push(<Grid item xs={4} sm={2} md={2} lg={2} style={{textAlign: 'center'}}><Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '15rem', width: '100%'}}/></Grid>);
         }
         
         return (isEmpty(this.state.data) ?
@@ -151,14 +151,14 @@ class Monthly extends React.Component {
           </div>
           :
           <div className={classes.root}>
-            <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
-                <Grid item sm={2} md={2} lg={2} >
+            <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                <Grid item xs={2} sm={2} md={2} lg={2} >
                     <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
                 </Grid>
-                <Grid item sm={8} md={8} lg={8}>
+                <Grid item xs={8} sm={8} md={8} lg={8}>
                     {moment(this.state.month).format('MMMM') + ' ' + moment(this.state.month).format('YYYY')}
                 </Grid>
-                <Grid item sm={2} md={2} lg={2} >
+                <Grid item xs={2} sm={2} md={2} lg={2} >
                     <Right style={{cursor: 'pointer'}} onClick={this.next}/>
                 </Grid>
             </Grid>

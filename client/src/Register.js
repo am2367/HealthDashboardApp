@@ -199,61 +199,98 @@ class Register extends React.Component {
 
         return(
             <div style={{textAlign: 'center'}}>
-                <Card style={{width: '25%', margin: 'auto'}}>
-                    <CardHeader title="Register"/>
-                    <form style={{marginLeft: 10, marginBottom: 10, marginRight: 10}} id="form" className="form" onSubmit={this.handleRegister}>
-                        
-                        <TextField
-                            style={{width: '42.5%', marginTop: '2%'}}
-                            label="First Name"
-                            id="first_name" 
-                            value={this.state.first_name}
-                            onChange={this.handleChange('firstName')}
-                            variant="outlined"
-                            error={this.state.first_nameError ? true : false}
-                        />
+                <Grid item  xs={10} sm={8} md={4} lg={4} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                    <Card>
+                        <CardHeader title="Register"/>
+                        <form style={{marginLeft: 10, marginBottom: 10, marginRight: 10}} id="form" className="form" onSubmit={this.handleRegister}>
+                            
+                            <TextField
+                                style={{width: '42.5%', marginTop: '2%'}}
+                                label="First Name"
+                                id="first_name" 
+                                value={this.state.first_name}
+                                onChange={this.handleChange('firstName')}
+                                variant="outlined"
+                                error={this.state.first_nameError ? true : false}
+                            />
 
-                        <TextField
-                            style={{width: '42.5%', marginTop: '2%'}}
-                            label="Last Name"
-                            id="last_name" 
-                            value={this.state.last_name}
-                            onChange={this.handleChange('lastName')}
-                            variant="outlined"
-                            error={this.state.last_nameError ? true : false}
-                        />
+                            <TextField
+                                style={{width: '42.5%', marginTop: '2%'}}
+                                label="Last Name"
+                                id="last_name" 
+                                value={this.state.last_name}
+                                onChange={this.handleChange('lastName')}
+                                variant="outlined"
+                                error={this.state.last_nameError ? true : false}
+                            />
 
-                        <TextField
-                            style={{width: '85%', marginTop: '2%'}}
-                            label="Email"
-                            id="email" 
-                            value={this.state.email}
-                            onChange={this.handleChange('email')}
-                            variant="outlined"
-                            error={this.state.emailError ? true : false}
-                        />
+                            <TextField
+                                style={{width: '85%', marginTop: '2%'}}
+                                label="Email"
+                                id="email" 
+                                value={this.state.email}
+                                onChange={this.handleChange('email')}
+                                variant="outlined"
+                                error={this.state.emailError ? true : false}
+                            />
 
-                        <TextField
-                            style={{width: '85%', marginTop: '2%'}}
-                            label="Username"
-                            id="username" 
-                            value={this.state.username}
-                            onChange={this.handleChange('username')}
-                            variant="outlined"
-                            error={this.state.usernameError ? true : false}
-                        />
+                            <TextField
+                                style={{width: '85%', marginTop: '2%'}}
+                                label="Username"
+                                id="username" 
+                                value={this.state.username}
+                                onChange={this.handleChange('username')}
+                                variant="outlined"
+                                error={this.state.usernameError ? true : false}
+                            />
 
-                        <TextField
-                            style={{width: '85%', marginTop: '2%'}}
-                            id="registerPassword"
-                            label="Password"
-                            error={this.state.passwordError ? true : false}
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            value={this.state.password}
-                            onChange={this.handleChange('password')}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment:
+                            <TextField
+                                style={{width: '85%', marginTop: '2%'}}
+                                id="registerPassword"
+                                label="Password"
+                                error={this.state.passwordError ? true : false}
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                value={this.state.password}
+                                onChange={this.handleChange('password')}
+                                variant="outlined"
+                                InputProps={{
+                                    endAdornment:
+                                        <InputAdornment position="end">
+                                        <IconButton
+                                            onClick={this.handleClickShowPasssword}
+                                            onMouseDown={this.handleMouseDownPassword}
+                                        >
+                                            {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                        <Tooltip
+                                        id="tooltip-controlled"
+                                        title="Password needs to be at least 8 characters long and must contain an upper case, lower case, number, and special character."
+                                        onClose={this.handleTooltipClose}
+                                        enterDelay={200}
+                                        leaveDelay={200}
+                                        onOpen={this.handleTooltipOpen}
+                                        open={this.state.tooltipOpen}
+                                        placement="top"
+                                        >
+                                        <IconButton aria-label="Delete">
+                                            <Info />
+                                        </IconButton>
+                                        </Tooltip>
+                                        </InputAdornment>
+                                }}
+                            />
+
+                            <TextField
+                                style={{width: '85%', marginTop: '2%'}}
+                                id="confirmPassword"
+                                label="Confirm Password"
+                                error={this.state.confirmPasswordError ? true : false}
+                                type={this.state.showPassword ? 'text' : 'password'}
+                                value={this.state.confirmPassword}
+                                onChange={this.handleChange('confirmPassword')}
+                                variant="outlined"
+                                InputProps={{
+                                    endAdornment:
                                     <InputAdornment position="end">
                                     <IconButton
                                         onClick={this.handleClickShowPasssword}
@@ -261,58 +298,23 @@ class Register extends React.Component {
                                     >
                                         {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
                                     </IconButton>
-                                    <Tooltip
-                                    id="tooltip-controlled"
-                                    title="Password needs to be at least 8 characters long and must contain an upper case, lower case, number, and special character."
-                                    onClose={this.handleTooltipClose}
-                                    enterDelay={200}
-                                    leaveDelay={200}
-                                    onOpen={this.handleTooltipOpen}
-                                    open={this.state.tooltipOpen}
-                                    placement="top"
-                                    >
-                                    <IconButton aria-label="Delete">
-                                        <Info />
-                                    </IconButton>
-                                    </Tooltip>
                                     </InputAdornment>
-                            }}
-                        />
+                                }}
+                            />
 
-                        <TextField
-                            style={{width: '85%', marginTop: '2%'}}
-                            id="confirmPassword"
-                            label="Confirm Password"
-                            error={this.state.confirmPasswordError ? true : false}
-                            type={this.state.showPassword ? 'text' : 'password'}
-                            value={this.state.confirmPassword}
-                            onChange={this.handleChange('confirmPassword')}
-                            variant="outlined"
-                            InputProps={{
-                                endAdornment:
-                                <InputAdornment position="end">
-                                <IconButton
-                                    onClick={this.handleClickShowPasssword}
-                                    onMouseDown={this.handleMouseDownPassword}
-                                >
-                                    {this.state.showPassword ? <VisibilityOff /> : <Visibility />}
-                                </IconButton>
-                                </InputAdornment>
-                            }}
-                        />
-
-                        <FormControl className={classes.formControl}>
-                            <div style={{textAlign: "center"}}>
-                                <Button id="register" className={classes.button} type="submit" style={{width: '25%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
-                                Register
-                                </Button>
-                                <Button id='login' className={classes.button} onClick={this.login} style={{width: '25%',color: 'white', backgroundColor: '#3f51b5'}}>
-                                Login
-                                </Button>
-                            </div>
-                        </FormControl>
-                    </form>
-                </Card>
+                            <FormControl className={classes.formControl}>
+                                <div style={{textAlign: "center"}}>
+                                    <Button id="register" className={classes.button} type="submit" style={{width: '33%',color: 'white', backgroundColor: '#3f51b5', marginRight: '1%'}}>
+                                        Register
+                                    </Button>
+                                    <Button id='login' className={classes.button} onClick={this.login} style={{width: '33%',color: 'white', backgroundColor: '#3f51b5'}}>
+                                        Login
+                                    </Button>
+                                </div>
+                            </FormControl>
+                        </form>
+                    </Card>
+                </Grid>
             </div>
         )
     }

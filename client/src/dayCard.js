@@ -159,10 +159,10 @@ class DayCard extends React.Component {
             return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
             {/*<CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>*/}
             <Grid container style={{margin: 'auto', display: 'flex', paddingLeft: '24px', paddingRight: '24px'}}>
-                <Grid item sm={4} md={4} lg={4} style={{textAlign: 'start'}}>
+                <Grid item xs={5} sm={4} md={4} lg={4} style={{textAlign: 'start'}}>
                     <Typography variant="caption"> Actual | Expected </Typography>
                 </Grid>
-                <Grid item sm={8} md={8} lg={8} 
+                <Grid item xs={7} sm={8} md={8} lg={8} 
                       style={{display: 'flex', alignItems: 'flex-end', flexDirection: 'row-reverse'}}>
                     <Button 
                         style={{backgroundColor: this.state.editable ? '#ff0000b3' : '#008000b3'}}  

@@ -137,7 +137,7 @@ class Daily extends React.Component {
                         <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
                         :
                         <div>
-                            <Grid item sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                            <Grid item sm={8} md={8} lg={8} style={{justifyContent: 'center', margin: 'auto', display: 'flex', }}>
                                 <Grid item sm={2} md={2} lg={2} >
                                     <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
                                 </Grid>
