@@ -101,10 +101,6 @@ class Daily extends React.Component {
         }
     }
 
-  getDate = (day) => {
-    return(this.props.weekdays[moment(this.state.day[day-1]['Date']).isoWeekday()-1] + ' ' + moment(this.state.day[day-1]['Date']).format("YYYY-MM-DD") )
-  }
-
   getDayData = () => {
     //console.log(this.state.data)
     let year = moment(this.state.date).format('YYYY');
@@ -149,7 +145,6 @@ class Daily extends React.Component {
                                 </Grid>
                             </Grid>
                             <DayCard 
-                                weekdays={this.props.weekdays} 
                                 index={moment(this.state.date).format('DD') * 1 - 1} 
                                 data={this.getDayData()}
                             />

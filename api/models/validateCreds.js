@@ -2,6 +2,7 @@ var session = require('express-session')
 const bcrypt = require('bcrypt');
 
 const validateCreds = (req, callback) => {
+
     var MongoClient = require('mongodb').MongoClient;
 
     //Connection details for mLab if environmental variables exist (deployed from cloud)
@@ -15,6 +16,7 @@ const validateCreds = (req, callback) => {
         var url = "mongodb://localhost:27017/myapp";
     }
     MongoClient.connect(url, function(err, db) {
+
         var query = {Username: req.username}
 
         if (err) throw err;

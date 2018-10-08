@@ -140,7 +140,7 @@ class Weekly extends React.Component {
         for(var i=0; i < 3; i++){
             days.push(<Grid item xs={10} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                             <h1>{this.getDate(i)}</h1>
-                            <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(i, 'd').format("DD") * 1} data={this.getDayData(i)}/>
+                            <DayCard index={moment(startOfWeek).add(i, 'd').format("DD") * 1} data={this.getDayData(i)}/>
                         </Grid>);
         }
         return(days)
@@ -152,7 +152,7 @@ class Weekly extends React.Component {
         for(var x=3; x < 7; x++){
             days.push(<Grid item xs={10} sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
                                 <h1>{this.getDate(x)}</h1>
-                                <DayCard weekdays={this.props.weekdays} index={moment(startOfWeek).add(x, 'd').format("DD") * 1} data={this.getDayData(x)}/>
+                                <DayCard index={moment(startOfWeek).add(x, 'd').format("DD") * 1} data={this.getDayData(x)}/>
                             </Grid>);
         }
         return(days)

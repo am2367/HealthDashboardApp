@@ -37,10 +37,8 @@ const styles = theme => ({
 class App extends React.Component {
   state = {loggedIn: false}
 
-  weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
   showDash = () => {
-    return(<Dashboard weekdays={this.weekdays} loggedIn={this.state.loggedIn}/>)
+    return(<Dashboard loggedIn={this.state.loggedIn}/>)
   };
 
   showLogin = () => {

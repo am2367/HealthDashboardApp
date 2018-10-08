@@ -27,6 +27,8 @@ const styles = theme => ({
   },
   viewButtons: {
     backgroundColor: '#14e4ff',
+    borderRadius: 0,
+    borderRight: '1px solid #3f51b5',
     padding: '0'
   },
   viewLinks: {
@@ -39,8 +41,6 @@ const styles = theme => ({
 
 class Dashboard extends React.Component {
   state = {loggedIn: false, data: {}, year: moment().format('YYYY')}
-
-  weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   componentWillMount = () => {
     let thisRef = this
@@ -116,7 +116,6 @@ class Dashboard extends React.Component {
   showDaily = () => {
     return(<Daily 
                 redirect={this.redirect} 
-                weekdays={this.weekdays} 
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
@@ -127,7 +126,6 @@ class Dashboard extends React.Component {
   showWeekly = () => {
     return(<Weekly 
                 redirect={this.redirect} 
-                weekdays={this.weekdays} 
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
@@ -138,7 +136,6 @@ class Dashboard extends React.Component {
   showMonthly = () => {
     return(<Monthly 
                 redirect={this.redirect} 
-                weekdays={this.weekdays} 
                 loggedIn={this.state.loggedIn}
                 data={this.state.data}
                 getData={this.getData}
@@ -157,7 +154,7 @@ class Dashboard extends React.Component {
       <Router>
         <div className={classes.root}>
           <TopNav redirect={this.redirect} username={this.state.username}/>
-            <Grid container spacing={16}>
+            <Grid container>
               <Grid item xs={4} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
                 <Button onClick={() => {this.viewChange('Daily')}} style={{backgroundColor: this.state.clicked=='Daily' ? '#e6e6e6' : '#14e4ff'}} fullWidth className={classes.viewButtons}><Link className={classes.viewLinks} to="/Dashboard/Daily">Daily</Link></Button>
               </Grid>

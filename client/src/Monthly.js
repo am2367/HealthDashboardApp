@@ -163,7 +163,7 @@ class Monthly extends React.Component {
                 </Grid>
             </Grid>
             <Grid container spacing={24}>
-              <DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} weekdays={this.props.weekdays} data={this.getDayData(this.state.openDay)}/>
+              <DayModal day={this.state.openDay} open={this.state.open} onClose={this.close} data={this.getDayData(this.state.openDay)}/>
               {days}
             </Grid>
           </div>)

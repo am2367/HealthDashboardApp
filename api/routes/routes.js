@@ -15,21 +15,27 @@ const path = require('path');
 const moment =  require('moment');
 const exportData = require('../models/exportData.js');
 const checkSession = require('../models/checkSession.js');
+const validateFields = require('../models/validateFields.js');
 
 //login
 router.post('/api/login', (req, res) => {
     //console.log(req.body)
-    validateCreds(req.body, function(result){
-        console.log(result)
-        if(result == 'Correct'){
-            req.session.username = req.body.username;
-            req.session.save;
-            res.json('Correct')
-        }
-        else{
-            res.json('Incorrect')
-        }
-    })
+    if(validateFields(req)){
+        validateCreds(req.body, function(result){
+            //console.log(result)
+            if(result == 'Correct'){
+                req.session.username = req.body.username;
+                req.session.save;
+                res.json('Correct')
+            }
+            else{
+                res.json('Incorrect')
+            }
+        })
+    }
+    else{
+        res.json('Incorrect')        
+    }
 });
 
 //logout
@@ -61,51 +67,62 @@ router.get('/api/getUsername', (req, res) => {
 //register
 router.post('/api/register', (req, res) => {
     console.log(req.body)
-    register(req.body, function(result){
-        //console.log(result)
-        if(result === 'Registered'){
-            req.session.username = req.body.username;
-            req.session.save;
-            insertYearly(moment().format('YYYY'), req.session.username, function(result){
-                //console.log(result);
-                res.json('Registered')
-            })
-        }
-        else if(result === "Username Taken"){
-            res.json("Username Taken");
-        }
-        else if(result === "Email Taken"){
-            res.json("Email Taken");
-        }
-        else{
-            res.json('Error')
-        }
-    })
+    if(validateFields(req)){
+
+        register(req.body, function(result){
+            //console.log(result)
+            if(result === 'Registered'){
+                req.session.username = req.body.username;
+                req.session.save;
+                insertYearly(moment().format('YYYY'), req.session.username, function(result){
+                    //console.log(result);
+                    res.json('Registered')
+                })
+            }
+            else if(result === "Username Taken"){
+                res.json("Username Taken");
+            }
+            else if(result === "Email Taken"){
+                res.json("Email Taken");
+            }
+            else{
+                res.json('Error')
+            }
+        })
+    }
+    else{
+        res.json('Error')
+    }
 });
 
 //get yearly stats
 router.get('/api/getStats/Yearly', (req, res) => {
     console.log(req.query)
+    if(validateFields(req)){
 
-    if(checkSession(req)){
+        if(checkSession(req)){
 
-        getYearly(req.query.year, req.session.username, function(result){
-            //console.log(result)
-            
-            if(result == 'Empty'){
+            getYearly(req.query.year, req.session.username, function(result){
+                //console.log(result)
+                
+                if(result == 'Empty'){
 
-                insertYearly(req.query.year, req.session.username, function(result){
-                    //console.log(result)
-                    res.json('Inserted!')
-                })
-            }
-            else{
-                res.json(result)
-            }
-        })
+                    insertYearly(req.query.year, req.session.username, function(result){
+                        //console.log(result)
+                        res.json('Inserted!')
+                    })
+                }
+                else{
+                    res.json(result)
+                }
+            })
+        }
+        else{
+            res.redirect('/login');
+        }
     }
     else{
-        res.redirect('/login');
+        res.json('Empty Fields');
     }
 });
 
@@ -165,17 +182,23 @@ router.get('/api/getStats/Weekly', (req, res) => {
 //set weekly stats
 router.post('/api/setStats', (req, res) => {
     console.log(req.body)
+    
+    if(validateFields(req)){
 
-    if(checkSession(req)){
+        if(checkSession(req)){
 
-        setStats(req.body, req.session.username, function(result){
-            //console.log(result)
+            setStats(req.body, req.session.username, function(result){
+                //console.log(result)
 
-            res.json(result)
-        })
+                res.json(result)
+            })
+        }
+        else{
+            res.redirect('/login');
+        }
     }
     else{
-        res.redirect('/login');
+        res.json("Empty Fields")
     }
 });
 
@@ -209,13 +232,22 @@ router.get('/api/getStats/Monthly', (req, res) => {
 router.get('/api/export', (req, res) => {
     console.log(req.query)
 
-    if(checkSession(req)){
-        exportData(req.query, req.session.username, function(result){
-            res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-            res.setHeader("Content-Disposition", "attachment; filename=" + "report.xls");
-            res.end(result, 'binary')
-        })
-        
+    if(validateFields(req)){
+
+        if(checkSession(req)){
+            exportData(req.query, req.session.username, function(result){
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+                res.setHeader("Content-Disposition", "attachment; filename=" + "report.xls");
+                res.end(result, 'binary')
+            })
+            
+        }
+        else{
+            res.redirect('/login');
+        }
+    }
+    else{
+        res.json("Empty Fields")
     }
 });
 
