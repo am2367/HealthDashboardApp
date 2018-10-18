@@ -7,7 +7,11 @@
     "server": "nodemon --max-old-space-size=4096 server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "devTest": "set DEBUG=express:* && concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prodTest": "set NODE_ENV=production && npm run server"
+  },
+  "engines": {
+    "node": "^8.0.0"
   },
   "author": "",
   "license": "ISC",
@@ -17,6 +21,7 @@
   },
   "dependencies": {
     "@cloudant/cloudant": "^2.3.0",
+    "@material-ui/core": "^3.2.2",
     "bcrypt": "^3.0.1",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.1",

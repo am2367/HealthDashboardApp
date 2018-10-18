@@ -36,7 +36,7 @@ const styles = theme => ({
 
 class App extends React.Component {
   state = {loggedIn: false}
-
+  
   showDash = () => {
     return(<Dashboard loggedIn={this.state.loggedIn}/>)
   };

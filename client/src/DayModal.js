@@ -26,7 +26,7 @@ class DayModal extends React.Component {
   }
 
   getDate = (day) => {
-    return(this.props.weekdays[moment(this.state.data['Date']).isoWeekday()-1] + ' ' + moment(this.state.data['Date']).format("YYYY-MM-DD") )
+    return(moment(this.state.data['Date']).format('dddd')  + ' ' + moment(this.state.data['Date']).format("YYYY-MM-DD") )
   }
 
   render() {

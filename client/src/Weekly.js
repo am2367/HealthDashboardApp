@@ -139,9 +139,11 @@ class Weekly extends React.Component {
         let days = []
         for(var i=0; i < 3; i++){
             days.push(<Grid item xs={10} sm={4} md={4} lg={4} style={{textAlign: 'center'}}>
-                            <h1>{this.getDate(i)}</h1>
-                            <DayCard index={moment(startOfWeek).add(i, 'd').format("DD") * 1} data={this.getDayData(i)}/>
-                        </Grid>);
+                        <Typography component="h2" variant="display1" color="textPrimary" gutterBottom>
+                            {this.getDate(i)}
+                        </Typography>
+                        <DayCard index={moment(startOfWeek).add(i, 'd').format("DD") * 1} data={this.getDayData(i)}/>
+                      </Grid>);
         }
         return(days)
     }
@@ -151,9 +153,11 @@ class Weekly extends React.Component {
         let days = []
         for(var x=3; x < 7; x++){
             days.push(<Grid item xs={10} sm={3} md={3} lg={3} style={{textAlign: 'center'}}>
-                                <h1>{this.getDate(x)}</h1>
-                                <DayCard index={moment(startOfWeek).add(x, 'd').format("DD") * 1} data={this.getDayData(x)}/>
-                            </Grid>);
+                        <Typography component="h2" variant="display1" color="textPrimary" gutterBottom>
+                            {this.getDate(x)}
+                        </Typography>
+                        <DayCard index={moment(startOfWeek).add(x, 'd').format("DD") * 1} data={this.getDayData(x)}/>
+                      </Grid>);
         }
         return(days)
     }
@@ -176,7 +180,7 @@ class Weekly extends React.Component {
 
         
         return (isEmpty(this.state.data)
-                ?
+            ?
             <div className={classes.root}>
                 <Grid container spacing={24} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
                     {daysEmpty}
@@ -184,15 +188,17 @@ class Weekly extends React.Component {
             </div>
             :
             <div className={classes.root}>
-                <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+                <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto',  marginTop: '1%', display: 'flex'}}>
                     <Grid item sm={2} md={2} lg={2} >
-                        <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
+                        <Left style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.previous}/>
                     </Grid>
                     <Grid item xs={8} sm={8} md={8} lg={8}>
-                        {moment(this.state.week).format('MM/DD/YYYY') + ' - ' + moment(this.state.week).endOf("isoWeek").format('MM/DD/YYYY')}
+                        <Typography component="h2" variant="display1" color="textPrimary" gutterBottom>
+                            {moment(this.state.week).format('MM/DD/YYYY') + ' - ' + moment(this.state.week).endOf("isoWeek").format('MM/DD/YYYY')}
+                        </Typography>
                     </Grid>
                     <Grid item xs={2} sm={2} md={2} lg={2} >
-                        <Right style={{cursor: 'pointer'}} onClick={this.next}/>
+                        <Right style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.next}/>
                     </Grid>
                 </Grid>
                 <Grid container spacing={24} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>

@@ -121,7 +121,7 @@ class DayCard extends React.Component {
         const { classes } = this.props;
         //console.log(this.state.data)
         const field = (id, item, expected) => (
-            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center'}}>
+            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? '' : 'none', textAlign: 'center', backgroundColor: 'orange',}}>
                 <TextField
                 id={id}
                 label="Actual"
@@ -151,12 +151,41 @@ class DayCard extends React.Component {
             </TableCell>
         )
         const dataCell = (id, item, expected) => (
-            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center'}}>
+            <TableCell numeric style={{paddingRight: 0, display: this.state.editable ? 'none' : '', textAlign: 'center', backgroundColor: 'orange', borderTopRightRadius: item=="Cals" ? '20%' : '0', borderBottomRightRadius: item=="Cals" ? '20%' : '0'}}>
                 {this.state.data[id][item]} | {this.state.data[id][expected]}
             </TableCell>
         )
+
+        const activities = ['Run', 'Swim', 'Bike', 'Workout'];
+        const stats = ['Time', 'Distance', 'Intensity', 'Cals']
+
+        const entries = activities.map((value, index) => {
+            return (<TableBody key={value}>
+                <TableRow>
+                    <TableCell component="th" scope="row" style={{paddingRight: 0, backgroundColor: 'orange', borderTopLeftRadius: '20%', borderBottomLeftRadius: '20%'}}>
+                        <Icon>
+                            {value=="Workout" ? <WorkoutIcon/> : 
+                             value=="Swim" ? <SwimIcon/> :
+                             value=="Bike" ? <BikeIcon/> :
+                             value=="Run" ? <RunIcon/> : ''}
+                        </Icon>
+                    </TableCell>
+                    {dataCell(value, 'Time', 'TimeExpected')}
+                    {dataCell(value, 'Distance', 'DistanceExpected')}
+                    {dataCell(value, 'Intensity', 'IntensityExpected')}
+                    {dataCell(value, 'Cals', 'CalsExpected')}
+                    {field(value, 'Time', 'TimeExpected')}
+                    {field(value, 'Distance', 'DistanceExpected')}
+                    {field(value, 'Intensity', 'IntensityExpected')}
+                    {field(value, 'Cals', 'CalsExpected')}
+                </TableRow>
+            </TableBody>)
+        })
+
+        console.log(entries)
+
         if (this.state.data){
-            return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : ''}} className={classes.Card}>
+            return (<Card style={{backgroundColor: this.isTodayCard() ? '#14e4ff' : '', borderRadius: '5%'}} className={classes.Card}>
             {/*<CardHeader title={this.props.weekdays[moment(this.state.data[this.props.index]['Date']).isoWeekday()-1] + ' ' + moment(this.state.data[this.props.index]['Date']).format("YYYY-MM-DD")}/>*/}
             <Grid container style={{margin: 'auto', display: 'flex', paddingLeft: '24px', paddingRight: '24px'}}>
                 <Grid item xs={5} sm={4} md={4} lg={4} style={{textAlign: 'start'}}>
@@ -177,96 +206,37 @@ class DayCard extends React.Component {
                 </Grid>
             </Grid>
             <CardContent style={{overflowX: 'auto'}}>
-                <Table>
+                <Table style={{borderSpacing: '0px 1rem', borderCollapse: 'unset'}}>
                     <TableHead>
                     <TableRow>
                         <TableCell 
                             numeric 
-                            style={{paddingRight: 0, textAlign: 'left', width: '50px'}}>
+                            style={{paddingRight: 0, textAlign: 'left', width: '50px', backgroundColor: 'orange', borderTopLeftRadius: '20%', borderBottomLeftRadius: '20%'}}>
                             Activity
                         </TableCell>
                         <TableCell 
                             numeric 
-                            style={{paddingRight: 0, textAlign: 'center', width: '70px'}}>
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', backgroundColor: 'orange'}}>
                             Time(H)
                         </TableCell>
                         <TableCell 
                             numeric 
-                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px', backgroundColor: 'orange'}}>
                             Distance(M)
                         </TableCell>
                         <TableCell 
                             numeric 
-                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px', backgroundColor: 'orange'}}>
                             Intensity(%)
                         </TableCell>
                         <TableCell 
                             numeric 
-                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px'}}>
+                            style={{paddingRight: 0, textAlign: 'center', width: '70px', paddingLeft: '15px', backgroundColor: 'orange', borderTopRightRadius: '20%', borderBottomRightRadius: '20%'}}>
                             kCals
                         </TableCell>
                     </TableRow>
                     </TableHead>
-                    <TableBody key="Run">
-                        <TableRow>
-                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                <Icon><RunIcon/></Icon>
-                            </TableCell>
-                            {dataCell('Run', 'Time', 'TimeExpected')}
-                            {dataCell('Run', 'Distance','DistanceExpected')}
-                            {dataCell('Run', 'Intensity', 'IntensityExpected')}
-                            {dataCell('Run', 'Cals', 'CalsExpected')}
-                            {field('Run', 'Time', 'TimeExpected')}
-                            {field('Run', 'Distance', 'DistanceExpected')}
-                            {field('Run', 'Intensity', 'IntensityExpected')}
-                            {field('Run', 'Cals', 'CalsExpected')}
-                        </TableRow>
-                    </TableBody>
-                    <TableBody key="Swim">
-                        <TableRow>
-                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                <Icon><SwimIcon/></Icon>
-                            </TableCell>
-                            {dataCell('Swim', 'Time', 'TimeExpected')}
-                            {dataCell('Swim', 'Distance', 'DistanceExpected')}
-                            {dataCell('Swim', 'Intensity', 'IntensityExpected')}
-                            {dataCell('Swim', 'Cals', 'CalsExpected')}
-                            {field('Swim', 'Time', 'TimeExpected')}
-                            {field('Swim', 'Distance', 'DistanceExpected')}
-                            {field('Swim', 'Intensity', 'IntensityExpected')}
-                            {field('Swim', 'Cals', 'CalsExpected')}
-                        </TableRow>
-                    </TableBody>
-                    <TableBody key="Bike">
-                        <TableRow>
-                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                <Icon><BikeIcon/></Icon>
-                            </TableCell>
-                            {dataCell('Bike', 'Time', 'TimeExpected')}
-                            {dataCell('Bike', 'Distance', 'DistanceExpected')}
-                            {dataCell('Bike', 'Intensity', 'IntensityExpected')}
-                            {dataCell('Bike', 'Cals', 'CalsExpected')}
-                            {field('Bike', 'Time', 'TimeExpected')}
-                            {field('Bike', 'Distance', 'DistanceExpected')}
-                            {field('Bike', 'Intensity', 'IntensityExpected')}
-                            {field('Bike', 'Cals', 'CalsExpected')}
-                        </TableRow>
-                    </TableBody>
-                    <TableBody key="Workout">
-                        <TableRow>
-                            <TableCell component="th" scope="row" style={{paddingRight: 0}}>
-                                <Icon><WorkoutIcon/></Icon>
-                            </TableCell>
-                            {dataCell('Workout', 'Time', 'TimeExpected')}
-                            {dataCell('Workout', 'Distance', 'DistanceExpected')}
-                            {dataCell('Workout', 'Intensity', 'IntensityExpected')}
-                            {dataCell('Workout', 'Cals', 'CalsExpected')}
-                            {field('Workout', 'Time', 'TimeExpected')}
-                            {field('Workout', 'Distance', 'DistanceExpected')}
-                            {field('Workout', 'Intensity', 'IntensityExpected')}
-                            {field('Workout', 'Cals', 'CalsExpected')}
-                        </TableRow>
-                    </TableBody>
+                    {entries}
                 </Table>   
             </CardContent>
             </Card>)

@@ -133,15 +133,17 @@ class Daily extends React.Component {
                         <Card style={{boxShadow: 'none', backgroundColor: '#f5f5f5', height: '25rem', width: '100%'}}/>
                         :
                         <div>
-                            <Grid item sm={8} md={8} lg={8} style={{justifyContent: 'center', margin: 'auto', display: 'flex', }}>
+                            <Grid item sm={8} md={8} lg={8} style={{justifyContent: 'center', margin: 'auto',  marginTop: '1%',display: 'flex', }}>
                                 <Grid item sm={2} md={2} lg={2} >
-                                    <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
+                                    <Left style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.previous}/>
                                 </Grid>
                                 <Grid item sm={8} md={8} lg={8}>
-                                    {moment(this.state.date).format('dddd') + ' ' + this.state.date}
+                                    <Typography component="h2" variant="display1" color="textPrimary" gutterBottom>
+                                        {moment(this.state.date).format('dddd') + ' ' + this.state.date}
+                                    </Typography>
                                 </Grid>
                                 <Grid item sm={2} md={2} lg={2} >
-                                    <Right style={{cursor: 'pointer'}} onClick={this.next}/>
+                                    <Right style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.next}/>
                                 </Grid>
                             </Grid>
                             <DayCard 

@@ -151,15 +151,17 @@ class Monthly extends React.Component {
           </div>
           :
           <div className={classes.root}>
-            <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', display: 'flex'}}>
+            <Grid item xs={8} sm={8} md={8} lg={8} style={{textAlign: 'center', margin: 'auto', marginTop: '1%', display: 'flex'}}>
                 <Grid item xs={2} sm={2} md={2} lg={2} >
-                    <Left style={{cursor: 'pointer'}} onClick={this.previous}/>
+                    <Left style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.previous}/>
                 </Grid>
                 <Grid item xs={8} sm={8} md={8} lg={8}>
+                  <Typography component="h2" variant="display1" color="textPrimary" gutterBottom>
                     {moment(this.state.month).format('MMMM') + ' ' + moment(this.state.month).format('YYYY')}
+                  </Typography>
                 </Grid>
                 <Grid item xs={2} sm={2} md={2} lg={2} >
-                    <Right style={{cursor: 'pointer'}} onClick={this.next}/>
+                    <Right style={{cursor: 'pointer', width: '2em', height: '2em'}} onClick={this.next}/>
                 </Grid>
             </Grid>
             <Grid container spacing={24}>
